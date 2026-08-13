@@ -29,14 +29,15 @@ infra/
 
 ### VM Naming Convention
 
-The first VM (`index 0`) is named **`control-node`**. All subsequent VMs are named **`managed-node-1`**, **`managed-node-2`**, and so on.
+The first VM (`index 0`) is named **`control-node`**. All subsequent VMs are named **`managed-node-1`**, **`managed-node-2`**, **`managed-node-3`**, and so on.
 
-With the default `vm_count = 3`:
+With the default `vm_count = 4`:
 
 ```
 control-node
 managed-node-1
 managed-node-2
+managed-node-3
 ```
 
 ---
@@ -65,15 +66,17 @@ Example output:
 
 ```
 public_ips = {
-  "control-node"   = "13.x.x.x"
-  "managed-node-1" = "13.x.x.y"
-  "managed-node-2" = "13.x.x.z"
+  "control-node"   = "13.x.x.v"
+  "managed-node-1" = "13.x.x.x"
+  "managed-node-2" = "13.x.x.y"
+  "managed-node-3" = "13.x.x.z"
 }
 
 ssh_login_commands = {
-  "control-node"   = "ssh -i ./generated-key.pem ec2-user@13.x.x.x"
-  "managed-node-1" = "ssh -i ./generated-key.pem ec2-user@13.x.x.y"
-  "managed-node-2" = "ssh -i ./generated-key.pem ec2-user@13.x.x.z"
+  "control-node"   = "ssh -i ./generated-key.pem ec2-user@13.x.x.v"
+  "managed-node-1" = "ssh -i ./generated-key.pem ec2-user@13.x.x.x"
+  "managed-node-2" = "ssh -i ./generated-key.pem ec2-user@13.x.x.y"
+  "managed-node-3" = "ssh -i ./generated-key.pem ec2-user@13.x.x.z"
 }
 ```
 
