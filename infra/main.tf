@@ -1,22 +1,5 @@
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.0"
-    }
-    tls = {
-      source  = "hashicorp/tls"
-      version = "~> 4.0"
-    }
-    local = {
-      source  = "hashicorp/local"
-      version = "~> 2.0"
-    }
-  }
-}
-
-provider "aws" {
-  region = var.region
+locals {
+  vm_names = [for i in range(var.vm_count) : i == 0 ? "control-node" : "managed-node-${i}"]
 }
 
 resource "tls_private_key" "ssh_key" {
@@ -56,28 +39,13 @@ resource "aws_security_group" "ssh" {
 }
 
 resource "aws_instance" "vm" {
-  count                  = 3
-  ami                    = "ami-02cada047ebd954cf"
-  instance_type          = "t2.medium"
+  count                  = var.vm_count
+  ami                    = var.ami
+  instance_type          = var.instance_type
   key_name               = aws_key_pair.generated.key_name
   vpc_security_group_ids = [aws_security_group.ssh.id]
 
   tags = {
-    Name = "vm-${count.index + 1}"
+    Name = local.vm_names[count.index]
   }
 }
-
-output "private_key_path" {
-  value = local_file.private_key.filename
-}
-
-output "public_ips" {
-  value = aws_instance.vm[*].public_ip
-}
-
-output "ssh_login_commands" {
-  value = [
-    for ip in aws_instance.vm[*].public_ip : "ssh -i ${local_file.private_key.filename} ec2-user@${ip}"
-  ]
-}
-
