@@ -84,34 +84,79 @@ ssh_login_commands = {
 
 ## Prerequisites
 
-- [Terraform](https://developer.hashicorp.com/terraform/install) >= 1.0
-- AWS credentials configured (via `~/.aws/credentials`, environment variables, or an IAM role)
-- The AMI ID in `terraform.tfvars` must be valid for the chosen region
+Before you begin, ensure you have the following installed:
 
----
+- Terraform (v1.x or later)
+- Git
+- Access to your cloud provider (AWS/Azure/GCP)
+- Appropriate cloud credentials
 
-## Usage
+## Clone the Repository
 
-### 1. Initialise
+Clone the repository from GitHub:
 
 ```bash
-cd infra
+git clone https://github.com/bansalt1/Ansible_training.git
+```
+
+Navigate to the Terraform configuration directory:
+
+```bash
+cd Ansible_training/infra
+```
+
+## Configure Cloud Credentials
+
+Export your cloud provider credentials before running Terraform.
+
+### AWS
+
+```bash
+export AWS_ACCESS_KEY_ID=<your-access-key>
+export AWS_SECRET_ACCESS_KEY=<your-secret-key>
+export AWS_DEFAULT_REGION=<your-region>
+```
+
+> **Note:** Export the credentials for the cloud provider you are using.
+
+## Initialize Terraform
+
+Download the required providers and initialize the working directory.
+
+```bash
 terraform init
 ```
 
-### 2. Preview changes
+## Review the Execution Plan
+
+Generate and review the execution plan.
 
 ```bash
 terraform plan
 ```
 
-### 3. Apply
+
+## Deploy the Infrastructure
+
+Provision the infrastructure by running:
 
 ```bash
-terraform apply
+terraform apply --auto-approve
 ```
 
-### 4. SSH into the control node
+Terraform will create **4 Virtual Machines** along with any associated infrastructure defined in the configuration.
+
+## Verify Resources
+
+After deployment, verify that the resources have been created successfully in your cloud provider console.
+
+You can also verify using:
+
+```bash
+terraform state list
+```
+
+### SSH into the control node
 
 ```bash
 $(terraform output -raw ssh_login_commands | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['control-node'])")
@@ -119,13 +164,27 @@ $(terraform output -raw ssh_login_commands | python3 -c "import sys,json; d=json
 
 Or simply copy the command from the `ssh_login_commands` output.
 
-### 5. Destroy
+## Destroy the Infrastructure
+
+When the resources are no longer required, remove them using:
 
 ```bash
-terraform destroy
+terraform destroy --auto-approve
 ```
 
+## Project Structure
+
+```text
+Ansible_training/
+└── infra/
+    ├── main.tf
+    ├── variables.tf
+    ├── outputs.tf
+    ├── provider.tf
+    └── terraform.tfvars (if used)
+```
 ---
+
 
 ## Notes
 
