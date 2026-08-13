@@ -1,26 +1,173 @@
-# Ansible SSH Configuration
+# Ansible Lab Commands
 
-This document explains how to enable password authentication and configure passwordless SSH authentication between the **Ansible Control Node** and the **Managed Nodes**.
+This document contains commonly used commands for preparing the Ansible Control Node and Managed Nodes, configuring SSH authentication, and testing Ansible connectivity.
 
-### Environment
+---
+
+# 1. Prepare the VMs
+
+## 1.1 Update System Packages
+
+For RHEL-based systems:
+
+```bash
+sudo dnf update -y
+```
+
+If `dnf` is not available:
+
+```bash
+sudo yum update -y
+```
+
+> **Note:** `dnf` is the recommended package manager for modern RHEL-based systems. `yum` can be used on systems where it is available.
+
+---
+
+## 1.2 Install Python on the Managed Nodes
+
+Ansible requires Python on the Managed Nodes for module execution. Ansible itself does not need to be installed on the Managed Nodes.
+
+Install Python using:
+
+```bash
+sudo dnf install -y python3
+```
+
+If `dnf` is not available:
+
+```bash
+sudo yum install -y python3
+```
+
+Verify the installation:
+
+```bash
+python3 --version
+```
+
+Expected output:
 
 ```text
-                 Ansible Control Node
-                        Node1
-                          |
-              +-----------+-----------+
-              |           |           |
-              v           v           v
-           Node2       Node3       Node4
-          Managed      Managed      Managed
-           Node         Node         Node
+Python 3.x.x
+```
+
+> **Note:** Run these commands on all Managed Nodes.
+
+---
+
+# 2. Install Ansible on the Control Node
+
+Ansible is installed only on the **Control Node (Node1)**. The Managed Nodes only require Python and an SSH connection from the Control Node.
+
+## 2.1 Install Python and pip3
+
+Run the following commands on **Node1 (Control Node)**:
+
+```bash
+sudo dnf install -y python3 python3-pip
+```
+
+If `dnf` is not available:
+
+```bash
+sudo yum install -y python3 python3-pip
+```
+
+Verify Python:
+
+```bash
+python3 --version
+```
+
+Verify pip:
+
+```bash
+python3 -m pip --version
 ```
 
 ---
 
-## 1. Enable Password Authentication
+## 2.2 Install Ansible
 
-Password authentication is required initially to copy the Control Node's SSH public key to the Managed Nodes.
+Install the full Ansible package for the current user:
+
+```bash
+python3 -m pip install --user ansible
+```
+
+> **Note:** The `--user` option installs Ansible under the current user's home directory and avoids modifying the system Python installation.
+
+---
+
+## 2.3 Configure the PATH
+
+The Ansible executables installed with `--user` are normally located under:
+
+```text
+~/.local/bin
+```
+
+Add this directory to the current user's `PATH`:
+
+```bash
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+Verify Ansible:
+
+```bash
+ansible --version
+```
+
+Expected output will be similar to:
+
+```text
+ansible [core X.XX.X]
+  python version = X.X.X
+```
+
+> **Note:** If you open a new terminal session and the `ansible` command is no longer available, add the following line to `~/.bashrc`:
+
+```bash
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+Then reload the shell configuration:
+
+```bash
+source ~/.bashrc
+```
+
+Verify again:
+
+```bash
+ansible --version
+```
+
+---
+
+# 3. Verify SSH Service
+
+Run the following commands on the Control Node and Managed Nodes.
+
+Check the SSH service:
+
+```bash
+sudo systemctl status sshd
+```
+
+If required, start and enable the SSH service:
+
+```bash
+sudo systemctl enable --now sshd
+```
+
+---
+
+# 4. Enable Password Authentication
+
+Password authentication can be enabled initially to allow the Control Node to copy its SSH public key to the Managed Nodes.
 
 Run the following commands on the nodes where password authentication needs to be enabled:
 
@@ -29,8 +176,6 @@ sudo sed -i -E 's/^#PasswordAuthentication.*/PasswordAuthentication yes/' /etc/s
 sudo sed -i -E 's/^PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config.d/50-cloud-init.conf && \
 sudo sshd -t && \
 sudo systemctl reload sshd
-
-sudo systemctl restart sshd
 ```
 
 Set the password for `ec2-user`:
@@ -39,7 +184,7 @@ Set the password for `ec2-user`:
 sudo passwd ec2-user
 ```
 
-### Verify Password Authentication
+## 4.1 Verify Password Authentication
 
 ```bash
 sudo sshd -T | grep -i passwordauthentication
@@ -55,31 +200,29 @@ passwordauthentication yes
 
 ---
 
-# 2. Configure Passwordless SSH Authentication
+# 5. Configure Passwordless SSH Authentication
 
-Passwordless SSH authentication uses an SSH key pair instead of the user's password.
+Passwordless SSH authentication allows the Ansible Control Node to connect to the Managed Nodes using an SSH key instead of a password.
 
 The **Control Node** generates the SSH key pair, and only the **public key** is copied to the Managed Nodes.
 
 ```text
-Control Node (Node1)
-        |
-        | ~/.ssh/id_ed25519
-        | ~/.ssh/id_ed25519.pub
-        |
-        +--------------------+
-        |                    |
-        v                    v
-     Node2                Node3                Node4
-     Managed              Managed              Managed
-     Node                 Node                 Node
+                 Ansible Control Node
+                        Node1
+                          |
+              +-----------+-----------+
+              |           |           |
+              v           v           v
+           Node2       Node3       Node4
+          Managed      Managed      Managed
+           Node         Node         Node
 ```
 
 > **Important:** The private key must remain on the Control Node. Only the public key should be copied to the Managed Nodes.
 
 ---
 
-## 2.1 Generate SSH Key Pair on the Control Node
+## 5.1 Generate SSH Key Pair on the Control Node
 
 Run the following commands on **Node1 (Control Node)**:
 
@@ -113,7 +256,7 @@ The following files will be created:
 
 ---
 
-## 2.2 Copy the Public Key to the Managed Nodes
+## 5.2 Copy the Public Key to the Managed Nodes
 
 Run the following commands from **Node1 (Control Node)**.
 
@@ -135,15 +278,13 @@ ssh-copy-id -i ~/.ssh/id_ed25519.pub ec2-user@<MANAGED_NODE_2_IP>
 ssh-copy-id -i ~/.ssh/id_ed25519.pub ec2-user@<MANAGED_NODE_3_IP>
 ```
 
-Replace:
+Replace the following placeholders with the respective IP addresses of the Managed Nodes:
 
 ```text
 <MANAGED_NODE_1_IP>
 <MANAGED_NODE_2_IP>
 <MANAGED_NODE_3_IP>
 ```
-
-with the respective private IP addresses of the Managed Nodes.
 
 The first time `ssh-copy-id` is executed for each node, you will be prompted for the `ec2-user` password.
 
@@ -157,14 +298,14 @@ on each Managed Node.
 
 ---
 
-## 2.3 Verify Passwordless SSH
+## 5.3 Verify Passwordless SSH
 
 From the **Control Node**, connect to each Managed Node.
 
 ### Node2
 
 ```bash
-ssh ec2-user@<MANAGED_NODE_1_IPP>
+ssh ec2-user@<MANAGED_NODE_1_IP>
 ```
 
 ### Node3
@@ -183,9 +324,9 @@ The SSH connection should be established without requesting the `ec2-user` passw
 
 ---
 
-## 2.4 Verify Using a Single Command
+## 5.4 Verify All Managed Nodes
 
-You can also verify all three Managed Nodes by running:
+You can also verify all three Managed Nodes using:
 
 ```bash
 ssh ec2-user@<MANAGED_NODE_1_IP> hostname
@@ -197,7 +338,7 @@ Each command should return the hostname of the corresponding Managed Node withou
 
 ---
 
-# 3. SSH Authentication Flow
+# 6. SSH Authentication Flow
 
 The final SSH authentication flow is:
 
@@ -214,38 +355,42 @@ The final SSH authentication flow is:
           Node2       Node3       Node4
          Managed      Managed      Managed
           Node         Node         Node
-             |           |           |
-             +-----------+-----------+
-                         |
-                  authorized_keys
 ```
 
-The authentication works as follows:
+The Control Node's public key:
 
 ```text
-Node1
- |
- | Private Key
- | ~/.ssh/id_ed25519
- |
- +------ SSH ------> Node2
-                     |
-                     | Public Key
-                     | ~/.ssh/authorized_keys
-                     |
-                     +--> Authentication successful
+~/.ssh/id_ed25519.pub
 ```
+
+is stored in:
+
+```text
+~/.ssh/authorized_keys
+```
+
+on each Managed Node.
+
+The private key:
+
+```text
+~/.ssh/id_ed25519
+```
+
+remains only on the Control Node.
 
 ---
 
-# 4. Important SSH Files and Permissions
+# 7. SSH Files and Permissions
 
-### Control Node
+## 7.1 Control Node
+
+The Control Node should contain:
 
 ```text
 ~/.ssh/
-├── id_ed25519          # Private key
-└── id_ed25519.pub      # Public key
+├── id_ed25519
+└── id_ed25519.pub
 ```
 
 Recommended permissions:
@@ -256,7 +401,9 @@ chmod 600 ~/.ssh/id_ed25519
 chmod 644 ~/.ssh/id_ed25519.pub
 ```
 
-### Managed Nodes
+## 7.2 Managed Nodes
+
+Each Managed Node should contain:
 
 ```text
 ~/.ssh/
@@ -270,11 +417,13 @@ chmod 700 ~/.ssh
 chmod 600 ~/.ssh/authorized_keys
 ```
 
+> **Important:** Never copy the private key (`id_ed25519`) to the Managed Nodes. Only the public key (`id_ed25519.pub`) should be added to `authorized_keys`.
+
 ---
 
-# 5. Ansible Connectivity Test
+# 8. Ansible Inventory
 
-Once passwordless SSH is working, configure the Ansible inventory on the Control Node.
+Create an inventory file on the Control Node.
 
 Example:
 
@@ -282,13 +431,36 @@ Example:
 [managed]
 node2 ansible_host=<MANAGED_NODE_1_IP>
 node3 ansible_host=<MANAGED_NODE_2_IP>
-node4 ansible_host=<MANAGED_NODE_2_IP>
+node4 ansible_host=<MANAGED_NODE_3_IP>
 
 [managed:vars]
 ansible_user=ec2-user
 ```
 
-Test Ansible connectivity:
+---
+
+# 9. Verify Ansible Inventory
+
+List the hosts available in the inventory:
+
+```bash
+ansible managed --list-hosts
+```
+
+Expected output:
+
+```text
+hosts (3):
+    node2
+    node3
+    node4
+```
+
+---
+
+# 10. Ansible Connectivity Test
+
+Test connectivity to all Managed Nodes:
 
 ```bash
 ansible managed -m ping
@@ -315,17 +487,83 @@ node4 | SUCCESS => {
 
 ---
 
-# 6. Summary
+# 11. Useful Ansible Ad-Hoc Commands
 
-The setup requires the following steps:
+## 11.1 Check Connectivity
 
-1. Enable password authentication temporarily if required.
-2. Set the `ec2-user` password.
-3. Generate an SSH key pair on the Control Node.
-4. Keep the private key on the Control Node.
-5. Copy only the public key to the Managed Nodes using `ssh-copy-id`.
-6. Test SSH connectivity from the Control Node to each Managed Node.
-7. Configure the Ansible inventory.
-8. Verify connectivity using the Ansible `ping` module.
+```bash
+ansible managed -m ping
+```
 
-> **Security Recommendation:** The private key (`~/.ssh/id_ed25519`) should never be copied to the Managed Nodes. Only `~/.ssh/id_ed25519.pub` should be added to the Managed Nodes' `~/.ssh/authorized_keys`.
+## 11.2 Check Hostname
+
+```bash
+ansible managed -m command -a "hostname"
+```
+
+## 11.3 Check Uptime
+
+```bash
+ansible managed -m command -a "uptime"
+```
+
+## 11.4 Check Disk Usage
+
+```bash
+ansible managed -m command -a "df -h"
+```
+
+## 11.5 Check Memory
+
+```bash
+ansible managed -m command -a "free -m"
+```
+
+## 11.6 Check OS Information
+
+```bash
+ansible managed -m command -a "cat /etc/os-release"
+```
+
+## 11.7 Check Current User
+
+```bash
+ansible managed -m command -a "whoami"
+```
+
+## 11.8 Execute a Command with Sudo
+
+```bash
+ansible managed -b -m command -a "whoami"
+```
+
+Expected output:
+
+```text
+root
+```
+
+---
+
+# 12. Summary
+
+The basic setup process is:
+
+1. Update the VM packages.
+2. Install Python on the Managed Nodes.
+3. Install Python and `pip3` on the Control Node.
+4. Install Ansible on the Control Node using `pip`.
+5. Configure the Control Node `PATH` for the user-installed Ansible binaries.
+6. Verify that the SSH service is running.
+7. Enable password authentication temporarily if required.
+8. Set the `ec2-user` password.
+9. Generate an SSH key pair on the Control Node.
+10. Keep the private key on the Control Node.
+11. Copy only the public key to the Managed Nodes using `ssh-copy-id`.
+12. Test SSH connectivity from the Control Node to each Managed Node.
+13. Configure the Ansible inventory.
+14. Verify the inventory.
+15. Verify Ansible connectivity using the `ping` module.
+16. Start using Ansible ad-hoc commands and playbooks.
+
+> **Security Recommendation:** Password authentication should ideally be disabled after key-based authentication has been successfully configured and verified. The private SSH key (`~/.ssh/id_ed25519`) should never be copied to the Managed Nodes.
