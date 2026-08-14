@@ -45,7 +45,7 @@ managed-node-3
 ## Variables
 
 | Name | Type | Default | Description |
-|---|---|---|---|
+|---|---|------------|---|
 | `region` | `string` | `ap-south-1` | AWS region to deploy into |
 | `ami` | `string` | `ami-02cada047ebd954cf` | AMI ID for EC2 instances |
 | `instance_type` | `string` | `t2.medium` | EC2 instance type |
