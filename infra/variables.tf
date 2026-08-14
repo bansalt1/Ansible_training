@@ -19,5 +19,5 @@ variable "instance_type" {
 variable "vm_count" {
   description = "Total number of VMs (1 control node + remaining managed nodes)"
   type        = number
-  default     = 3
+  default     = 4
 }
