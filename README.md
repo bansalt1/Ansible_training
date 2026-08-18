@@ -159,7 +159,7 @@ terraform state list
 ### SSH into the control node
 
 ```bash
-terraform output -raw ssh_login_commands 
+terraform output ssh_login_commands 
 ```
 
 Or simply copy the command from the `ssh_login_commands` output.
