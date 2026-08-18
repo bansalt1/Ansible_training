@@ -169,7 +169,7 @@ sudo systemctl enable --now sshd
 
 Password authentication can be enabled initially to allow the Control Node to copy its SSH public key to the Managed Nodes.
 
-Run the following commands on the nodes where password authentication needs to be enabled:
+Run the following commands on all the nodes (including control and managed) where password authentication needs to be enabled:
 
 ```bash
 sudo sed -i -E 's/^#PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
