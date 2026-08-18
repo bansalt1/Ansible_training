@@ -24,7 +24,7 @@ sudo yum update -y
 
 ---
 
-## 1.2 Install Python on the Managed Nodes
+## 1.2 Install Python on the Managed Nodes (if not available)
 
 Ansible requires Python on the Managed Nodes for module execution. Ansible itself does not need to be installed on the Managed Nodes.
 
