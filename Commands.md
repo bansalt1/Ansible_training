@@ -202,11 +202,12 @@ passwordauthentication yes
 
 # 5. Ansible Inventory
 
-Create an inventory file on the Control Node.
+## 5.1 Create the Inventory File
 
-Example:
+Create an inventory file on the Control Node:
 
-```ini
+```bash
+cat > ~/inventory.ini <<EOF
 [managed]
 node2 ansible_host=<MANAGED_NODE_1_IP>
 node3 ansible_host=<MANAGED_NODE_2_IP>
@@ -214,7 +215,35 @@ node4 ansible_host=<MANAGED_NODE_3_IP>
 
 [managed:vars]
 ansible_user=ec2-user
+EOF
 ```
+
+---
+
+## 5.2 Create the Ansible Configuration File
+
+Create an `ansible.cfg` file so that Ansible automatically uses the inventory file without requiring `-i` on every command:
+
+```bash
+cat > ./ansible.cfg <<EOF
+[defaults]
+inventory = ./inventory.ini
+EOF
+```
+
+Verify the configuration is picked up:
+
+```bash
+ansible --version
+```
+
+The output should include:
+
+```text
+config file = /home/ec2-user/ansible.cfg
+```
+
+> **Note:** Ansible looks for `ansible.cfg` in the current working directory first, then `~/.ansible.cfg`, then `/etc/ansible/ansible.cfg`. Creating it in the home directory (`~/ansible.cfg`) means it applies for all commands run from any directory by that user.
 
 ---
 
