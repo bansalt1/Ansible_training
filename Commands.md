@@ -532,44 +532,7 @@ chmod 600 ~/.ssh/authorized_keys
 
 ---
 
-# 11. Ansible Inventory
-
-Create an inventory file on the Control Node.
-
-Example:
-
-```ini
-[managed]
-node2 ansible_host=<MANAGED_NODE_1_IP>
-node3 ansible_host=<MANAGED_NODE_2_IP>
-node4 ansible_host=<MANAGED_NODE_3_IP>
-
-[managed:vars]
-ansible_user=ec2-user
-```
-
----
-
-# 12. Verify Ansible Inventory
-
-List the hosts available in the inventory:
-
-```bash
-ansible managed --list-hosts
-```
-
-Expected output:
-
-```text
-hosts (3):
-    node2
-    node3
-    node4
-```
-
----
-
-# 13. Ansible Connectivity Test
+# 11. Ansible Connectivity Test
 
 Test connectivity to all Managed Nodes:
 
@@ -598,51 +561,51 @@ node4 | SUCCESS => {
 
 ---
 
-# 14. Useful Ansible Ad-Hoc Commands
+# 12. Useful Ansible Ad-Hoc Commands
 
-## 14.1 Check Connectivity
+## 12.1 Check Connectivity
 
 ```bash
 ansible managed -m ping
 ```
 
-## 14.2 Check Hostname
+## 12.2 Check Hostname
 
 ```bash
 ansible managed -m command -a "hostname"
 ```
 
-## 14.3 Check Uptime
+## 12.3 Check Uptime
 
 ```bash
 ansible managed -m command -a "uptime"
 ```
 
-## 14.4 Check Disk Usage
+## 12.4 Check Disk Usage
 
 ```bash
 ansible managed -m command -a "df -h"
 ```
 
-## 14.5 Check Memory
+## 12.5 Check Memory
 
 ```bash
 ansible managed -m command -a "free -m"
 ```
 
-## 14.6 Check OS Information
+## 12.6 Check OS Information
 
 ```bash
 ansible managed -m command -a "cat /etc/os-release"
 ```
 
-## 14.7 Check Current User
+## 12.7 Check Current User
 
 ```bash
 ansible managed -m command -a "whoami"
 ```
 
-## 14.8 Execute a Command with Sudo
+## 12.8 Execute a Command with Sudo
 
 ```bash
 ansible managed -b -m command -a "whoami"
@@ -656,7 +619,7 @@ root
 
 ---
 
-# 15. Summary
+# 13. Summary
 
 The basic setup process is:
 
@@ -668,14 +631,13 @@ The basic setup process is:
 6. Verify that the SSH service is running.
 7. Enable password authentication temporarily if required.
 8. Set the `ec2-user` password.
-9. Configure the Ansible inventory.
-10. Verify the inventory.
-11. Test Ansible connectivity using password-based ad-hoc commands.
-12. Generate an SSH key pair on the Control Node.
-13. Keep the private key on the Control Node.
-14. Copy only the public key to the Managed Nodes using `ssh-copy-id`.
-15. Test SSH connectivity from the Control Node to each Managed Node.
-16. Verify Ansible connectivity using the `ping` module.
-17. Start using Ansible ad-hoc commands and playbooks.
+9. Configure the Ansible inventory and `ansible.cfg`.
+10. Test Ansible connectivity using password-based ad-hoc commands.
+11. Generate an SSH key pair on the Control Node.
+12. Keep the private key on the Control Node.
+13. Copy only the public key to the Managed Nodes using `ssh-copy-id`.
+14. Test SSH connectivity from the Control Node to each Managed Node.
+15. Verify Ansible connectivity using the `ping` module.
+16. Start using Ansible ad-hoc commands and playbooks.
 
 > **Security Recommendation:** Password authentication should ideally be disabled after key-based authentication has been successfully configured and verified. The private SSH key (`~/.ssh/id_ed25519`) should never be copied to the Managed Nodes.
