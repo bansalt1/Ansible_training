@@ -159,7 +159,7 @@ terraform state list
 ### SSH into the control node
 
 ```bash
-$(terraform output -raw ssh_login_commands | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['control-node'])")
+terraform output -raw ssh_login_commands 
 ```
 
 Or simply copy the command from the `ssh_login_commands` output.
