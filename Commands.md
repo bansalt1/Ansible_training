@@ -228,6 +228,7 @@ Create an `ansible.cfg` file so that Ansible automatically uses the inventory fi
 cat > ./ansible.cfg <<EOF
 [defaults]
 inventory = ./inventory.ini
+host_key_checking = False
 EOF
 ```
 
