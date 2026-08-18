@@ -270,28 +270,30 @@ hosts (3):
 
 These commands can be used before passwordless SSH is configured, by passing credentials inline with `-e`.
 
+> **Note:** `ansible_connection=paramiko` is required when using password authentication. Without it, Ansible uses the `ssh` connection type which requires the `sshpass` program to be installed. Paramiko is a pure-Python SSH implementation bundled with Ansible that handles password authentication directly.
+
 ## 7.1 Check Connectivity
 
 ```bash
-ansible managed -m ping -e "ansible_user=ec2-user ansible_password=<PASSWORD>"
+ansible managed -m ping -e "ansible_user=ec2-user ansible_password=<PASSWORD> ansible_connection=paramiko"
 ```
 
 ## 7.2 Check Hostname
 
 ```bash
-ansible managed -m command -a "hostname" -e "ansible_user=ec2-user ansible_password=<PASSWORD>"
+ansible managed -m command -a "hostname" -e "ansible_user=ec2-user ansible_password=<PASSWORD> ansible_connection=paramiko"
 ```
 
 ## 7.3 Check Uptime
 
 ```bash
-ansible managed -m command -a "uptime" -e "ansible_user=ec2-user ansible_password=<PASSWORD>"
+ansible managed -m command -a "uptime" -e "ansible_user=ec2-user ansible_password=<PASSWORD> ansible_connection=paramiko"
 ```
 
 ## 7.4 Check Disk Usage
 
 ```bash
-ansible managed -m command -a "df -h" -e "ansible_user=ec2-user ansible_password=<PASSWORD>"
+ansible managed -m command -a "df -h" -e "ansible_user=ec2-user ansible_password=<PASSWORD> ansible_connection=paramiko"
 ```
 
 ---
