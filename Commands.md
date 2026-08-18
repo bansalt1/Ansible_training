@@ -269,32 +269,44 @@ hosts (3):
 
 # 7. Ansible Ad-Hoc Commands with Password Authentication
 
-These commands can be used before passwordless SSH is configured, by passing credentials inline with `-e`.
+These commands can be used before passwordless SSH is configured. Ansible requires `sshpass` to handle password authentication over SSH. The `--ask-pass` flag prompts for the password interactively.
 
-> **Note:** `ansible_connection=paramiko` is required when using password authentication. Without it, Ansible uses the `ssh` connection type which requires the `sshpass` program to be installed. Paramiko is a pure-Python SSH implementation bundled with Ansible that handles password authentication directly.
+## 7.0 Install sshpass
+
+Run on the **Control Node**:
+
+```bash
+sudo dnf install -y sshpass
+```
+
+If `dnf` is not available:
+
+```bash
+sudo yum install -y sshpass
+```
 
 ## 7.1 Check Connectivity
 
 ```bash
-ansible managed -m ping -e "ansible_user=ec2-user ansible_password=<PASSWORD> ansible_connection=paramiko"
+ansible managed -m ping --ask-pass
 ```
 
 ## 7.2 Check Hostname
 
 ```bash
-ansible managed -m command -a "hostname" -e "ansible_user=ec2-user ansible_password=<PASSWORD> ansible_connection=paramiko"
+ansible managed -m command -a "hostname" --ask-pass
 ```
 
 ## 7.3 Check Uptime
 
 ```bash
-ansible managed -m command -a "uptime" -e "ansible_user=ec2-user ansible_password=<PASSWORD> ansible_connection=paramiko"
+ansible managed -m command -a "uptime" --ask-pass
 ```
 
 ## 7.4 Check Disk Usage
 
 ```bash
-ansible managed -m command -a "df -h" -e "ansible_user=ec2-user ansible_password=<PASSWORD> ansible_connection=paramiko"
+ansible managed -m command -a "df -h" --ask-pass
 ```
 
 ---
