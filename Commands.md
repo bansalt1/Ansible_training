@@ -619,7 +619,473 @@ root
 
 ---
 
-# 13. Summary
+# 13. Create and Run an Ansible Nginx Playbook
+
+This section demonstrates how to create an Ansible playbook that installs and starts Nginx on all Managed Nodes.
+
+The existing inventory contains the `managed` group. We will create an additional `webservers` group containing the same three nodes.
+
+The final directory structure will be:
+
+```text
+/home/ec2-user/
+├── ansible.cfg
+├── inventory.ini
+└── playbooks/
+    └── nginx.yml
+```
+
+> **Important:** The playbook uses `hosts: webservers`, so the `webservers` group must exist in the Ansible inventory.
+
+---
+
+## 13.1 Add the `webservers` Group
+
+Go to the directory containing the Ansible configuration and inventory files:
+
+```bash
+cd /home/ec2-user
+```
+
+Update the inventory file:
+
+```bash
+cat > inventory.ini <<'EOF'
+[managed]
+node2 ansible_host=3.110.90.44
+node3 ansible_host=65.1.148.99
+node4 ansible_host=13.233.104.229
+
+[managed:vars]
+ansible_user=ec2-user
+
+[webservers]
+node2
+node3
+node4
+
+[webservers:vars]
+ansible_user=ec2-user
+EOF
+```
+
+The inventory now contains two groups:
+
+```text
+managed
+ ├── node2
+ ├── node3
+ └── node4
+
+webservers
+ ├── node2
+ ├── node3
+ └── node4
+```
+
+The existing `managed` group is retained so that previously created Ansible commands continue to work.
+
+The new `webservers` group will be used by the Nginx playbook.
+
+---
+
+## 13.2 Verify the `webservers` Group
+
+Verify that Ansible recognizes all three nodes as members of the `webservers` group:
+
+```bash
+ansible webservers --list-hosts
+```
+
+Expected output:
+
+```text
+hosts (3):
+  node2
+  node3
+  node4
+```
+
+If all three nodes are displayed, the inventory is configured correctly.
+
+You can also view the complete inventory structure:
+
+```bash
+ansible-inventory --graph
+```
+
+Expected output will include:
+
+```text
+@webservers:
+  |--node2
+  |--node3
+  |--node4
+```
+
+---
+
+## 13.3 Test Ansible Connectivity
+
+Before creating or running the playbook, verify that the Control Node can communicate with all three Managed Nodes.
+
+Run:
+
+```bash
+ansible webservers -m ping
+```
+
+Expected output:
+
+```text
+node2 | SUCCESS => {
+    "changed": false,
+    "ping": "pong"
+}
+
+node3 | SUCCESS => {
+    "changed": false,
+    "ping": "pong"
+}
+
+node4 | SUCCESS => {
+    "changed": false,
+    "ping": "pong"
+}
+```
+
+All three nodes should return `SUCCESS`.
+
+> **Note:** The `ping` module does not use ICMP ping. Ansible connects to the Managed Nodes over SSH and executes the Ansible module remotely.
+
+---
+
+## 13.4 Create the Playbooks Directory
+
+Create a directory to store Ansible playbooks:
+
+```bash
+mkdir -p /home/ec2-user/playbooks
+```
+
+Change to the playbooks directory:
+
+```bash
+cd /home/ec2-user/playbooks
+```
+
+Verify the current directory:
+
+```bash
+pwd
+```
+
+Expected:
+
+```text
+/home/ec2-user/playbooks
+```
+
+---
+
+## 13.5 Create the Nginx Playbook
+
+Create the playbook:
+
+```bash
+cat > nginx.yml <<'EOF'
+---
+- name: Install and start nginx
+  hosts: webservers
+  become: true
+
+  tasks:
+
+    - name: Install nginx package
+      ansible.builtin.dnf:
+        name: nginx
+        state: present
+
+    - name: Ensure nginx is running
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
+EOF
+```
+
+Verify the playbook:
+
+```bash
+cat nginx.yml
+```
+
+The playbook contains two tasks.
+
+### Task 1 — Install Nginx
+
+```yaml
+- name: Install nginx package
+  ansible.builtin.dnf:
+    name: nginx
+    state: present
+```
+
+This ensures that the Nginx package is installed on all hosts in the `webservers` group.
+
+Because the Managed Nodes are RHEL-based systems, the `dnf` module is used instead of the `apt` module used by Debian/Ubuntu systems.
+
+The following:
+
+```yaml
+state: present
+```
+
+means that Nginx must be installed. If it is already installed, Ansible does not reinstall it.
+
+### Task 2 — Start and Enable Nginx
+
+```yaml
+- name: Ensure nginx is running
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: true
+```
+
+This ensures that:
+
+* Nginx is currently running.
+* Nginx is enabled to start automatically after a system reboot.
+
+The playbook also contains:
+
+```yaml
+become: true
+```
+
+This allows Ansible to use privilege escalation (`sudo`) because installing packages and managing system services require administrative privileges.
+
+---
+
+## 13.6 Syntax Check the Playbook
+
+Before running the playbook, validate its YAML and Ansible syntax.
+
+You should currently be in:
+
+```text
+/home/ec2-user/playbooks
+```
+
+Run:
+
+```bash
+ansible-playbook --syntax-check nginx.yml
+```
+
+Expected output:
+
+```text
+playbook: nginx.yml
+```
+
+If this is displayed without an error, the playbook syntax is valid.
+
+> **Note:** A syntax check does not execute the playbook. It only validates the playbook structure and syntax.
+
+---
+
+## 13.7 Run the Nginx Playbook
+
+The `ansible.cfg` and `inventory.ini` files are located in:
+
+```text
+/home/ec2-user/
+```
+
+Therefore, run the playbook from `/home/ec2-user` so Ansible automatically picks up the configured inventory.
+
+Go back to the home directory:
+
+```bash
+cd /home/ec2-user
+```
+
+Run:
+
+```bash
+ansible-playbook playbooks/nginx.yml
+```
+
+On the first execution, Ansible should install Nginx and start the service on all three Managed Nodes.
+
+A successful execution should look similar to:
+
+```text
+PLAY [Install and start nginx] ***********************************************
+
+TASK [Gathering Facts] *******************************************************
+ok: [node2]
+ok: [node3]
+ok: [node4]
+
+TASK [Install nginx package] *************************************************
+changed: [node2]
+changed: [node3]
+changed: [node4]
+
+TASK [Ensure nginx is running] ***********************************************
+changed: [node2]
+changed: [node3]
+changed: [node4]
+
+PLAY RECAP *******************************************************************
+node2 : ok=3 changed=2 unreachable=0 failed=0
+node3 : ok=3 changed=2 unreachable=0 failed=0
+node4 : ok=3 changed=2 unreachable=0 failed=0
+```
+
+The exact output may vary.
+
+---
+
+## 13.8 Run the Playbook a Second Time
+
+Run the same command again:
+
+```bash
+ansible-playbook playbooks/nginx.yml
+```
+
+The second execution should report `ok` instead of `changed` for the Nginx installation and service tasks:
+
+```text
+TASK [Install nginx package] *************************************************
+ok: [node2]
+ok: [node3]
+ok: [node4]
+
+TASK [Ensure nginx is running] ***********************************************
+ok: [node2]
+ok: [node3]
+ok: [node4]
+```
+
+This demonstrates **Ansible idempotency**.
+
+Ansible checks the current state of the Managed Nodes and only makes changes when the desired state has not already been achieved.
+
+For example:
+
+```text
+First Run
+---------
+Nginx not installed
+        ↓
+Ansible installs Nginx
+        ↓
+changed
+
+
+Second Run
+----------
+Nginx already installed
+        ↓
+Nginx already running
+        ↓
+No changes required
+        ↓
+ok
+```
+
+---
+
+## 13.9 Verify Nginx Is Running
+
+Verify the Nginx service on all Managed Nodes:
+
+```bash
+ansible webservers -b -m command -a "systemctl is-active nginx"
+```
+
+Expected output should contain:
+
+```text
+active
+```
+
+for `node2`, `node3`, and `node4`.
+
+---
+
+## 13.10 Verify Nginx Is Enabled
+
+Verify that Nginx will automatically start after a reboot:
+
+```bash
+ansible webservers -b -m command -a "systemctl is-enabled nginx"
+```
+
+Expected output:
+
+```text
+enabled
+```
+
+for all three Managed Nodes.
+
+---
+
+## 13.11 Verify the Nginx Version
+
+You can also verify that Nginx is installed by checking its version:
+
+```bash
+ansible webservers -m command -a "nginx -v"
+```
+
+Each Managed Node should return the installed Nginx version.
+
+---
+
+## 13.12 Final Directory Structure
+
+After completing this exercise, the Control Node should have:
+
+```text
+/home/ec2-user/
+├── ansible.cfg
+├── inventory.ini
+└── playbooks/
+    └── nginx.yml
+```
+
+The overall workflow is:
+
+```text
+Control Node
+    |
+    | inventory.ini
+    | webservers group
+    |
+    v
+Ansible Playbook
+nginx.yml
+    |
+    +------------------+------------------+
+    |                  |                  |
+    v                  v                  v
+  node2              node3              node4
+    |                  |                  |
+    v                  v                  v
+ Install Nginx      Install Nginx      Install Nginx
+ Start Nginx        Start Nginx        Start Nginx
+ Enable Nginx       Enable Nginx       Enable Nginx
+```
+---
+
+# 14. Summary
 
 The basic setup process is:
 
