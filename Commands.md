@@ -1157,8 +1157,47 @@ run command :-
 ansible-playbook playbooks/regular_tasks.yml
 ```
 
+# 16. Create Playbook file under playbook directory with name 'handlers_tasks.yml' .
+ content of file :-
+ 
+```bash
+cat > handlers_tasks.yml <<'EOF'
+---
+- name: Modify /etc/issue
+  hosts: all
+  become: yes
 
-# 16. Summary
+  tasks:
+
+    - name: Set Development text
+      copy:
+        content: "Development\n"
+        dest: /etc/issue
+      when: "'dev' in group_names"
+
+    - name: Set Test text
+      copy:
+        content: "Test\n"
+        dest: /etc/issue
+      when: "'test' in group_names"
+
+    - name: Set Production text
+      copy:
+        content: "Production\n"
+        dest: /etc/issue
+      when: "'prod' in group_names"
+EOF
+```
+
+run command :- 
+```bash
+ansible-playbook playbooks/handlers_tasks.yml
+```
+
+
+
+
+# 17. Summary
 
 The basic setup process is:
 
