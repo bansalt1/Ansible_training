@@ -1128,7 +1128,7 @@ EOF
 
 run command :- 
 ```bash
-ansible-playbook playbooks/file.yml
+ansible-playbook playbooks/configure.yml
 ```
 
 # 15. Create Playbook file under playbook directory with name 'regular_tasks.yml' .
