@@ -1084,8 +1084,54 @@ nginx.yml
  Enable Nginx       Enable Nginx       Enable Nginx
 ```
 ---
+# 14. Create Playbook file under playbook directory with name 'configure.yml' .
+ content of file :-
+ 
+```bash
+cat > configure.yml <<'EOF'
+---
+- name: Configure development web directory
+  hosts: all
+  become: yes
 
-# 14. Summary
+  tasks:
+    - name: Create webdev group
+      group:
+        name: webdev
+        state: present
+
+    - name: Create /webdev directory
+      file:
+        path: /webdev
+        state: directory
+        group: webdev
+        mode: '0775'
+
+    - name: Create /var/www/html directory
+      file:
+        path: /var/www/html
+        state: directory
+        mode: '0755'
+
+    - name: Create symbolic link
+      file:
+        src: /webdev
+        dest: /var/www/html/webdev
+        state: link
+
+    - name: Create index.html
+      copy:
+        content: "Development\n"
+        dest: /webdev/index.html
+EOF
+```
+
+run command :- 
+```bash
+ansible-playbook playbooks/file.yml
+```
+
+# 15. Summary
 
 The basic setup process is:
 
