@@ -1131,7 +1131,34 @@ run command :-
 ansible-playbook playbooks/file.yml
 ```
 
-# 15. Summary
+# 15. Create Playbook file under playbook directory with name 'regular_tasks.yml' .
+ content of file :-
+ 
+```bash
+cat > regular_tasks.yml <<'EOF'
+---
+- name: Configure hourly cron task
+  hosts: proxy
+  become: yes
+
+  tasks:
+
+    - name: Create root cron job
+      cron:
+        name: "Append current date to log"
+        user: root
+        minute: "0"
+        job: "date >> /var/log/time.log"
+EOF
+```
+
+run command :- 
+```bash
+ansible-playbook playbooks/regular_tasks.yml
+```
+
+
+# 16. Summary
 
 The basic setup process is:
 
