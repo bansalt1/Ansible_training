@@ -195,34 +195,12 @@ You should see `node1`, `node2` under `web` and `node3` under `db`. Once this lo
 
 ---
 
-**Q8.** In the recommended Ansible project directory structure, what is the purpose of `group_vars/`?
-
-- A) Stores variables specific to individual hosts that override group defaults
-- B) Stores variables applied to every host in a named group
-- C) Contains secrets encrypted with Ansible Vault
-- D) Holds Jinja2 templates for generating configuration files
-
-**Your Answer:** ___
-
----
-
 **Q9.** Which file controls Ansible's default behaviour — inventory path, remote user, and SSH settings — at the project level?
 
 - A) `inventory/hosts.ini`
 - B) `playbooks/site.yml`
 - C) `ansible.cfg`
 - D) `group_vars/all.yml`
-
-**Your Answer:** ___
-
----
-
-**Q10.** What is the correct `ansible.cfg` precedence order, from **highest** to **lowest**?
-
-- A) `~/.ansible.cfg` → `./ansible.cfg` → `/etc/ansible/ansible.cfg`
-- B) `ANSIBLE_CONFIG` env var → `./ansible.cfg` → `~/.ansible.cfg` → `/etc/ansible/ansible.cfg`
-- C) `/etc/ansible/ansible.cfg` → `~/.ansible.cfg` → `./ansible.cfg`
-- D) `./ansible.cfg` → `ANSIBLE_CONFIG` → `/etc/ansible/ansible.cfg`
 
 **Your Answer:** ___
 
@@ -239,34 +217,12 @@ You should see `node1`, `node2` under `web` and `node3` under `db`. Once this lo
 
 ---
 
-**Q12.** In an INI inventory file, how do you create a **parent group** `prod` that contains both `web` and `db` as child groups?
-
-- A) `[prod] web db`
-- B) `[prod:children]` on one line, then `web` and `db` on the following lines
-- C) `[prod:groups] web, db`
-- D) `parent: prod; children: web, db`
-
-**Your Answer:** ___
-
----
-
 **Q13.** Which command outputs your full inventory structure as JSON — useful for verifying hosts and groups before running a playbook?
 
 - A) `ansible --list-hosts all`
 - B) `ansible-inventory --list`
 - C) `ansible all --inventory`
 - D) `ansible-playbook --check inventory/`
-
-**Your Answer:** ___
-
----
-
-**Q14.** Where should variables for a **single host** be placed so they override group-level defaults?
-
-- A) `group_vars/all.yml`
-- B) `inventory/hosts.ini` inline
-- C) `host_vars/<hostname>.yml`
-- D) `roles/defaults/main.yml`
 
 **Your Answer:** ___
 
@@ -388,17 +344,6 @@ You should see `node1`, `node2` under `web` and `node3` under `db`. Once this lo
 - B) `>` followed by a space
 - C) `-` followed by a space
 - D) `+` followed by a space
-
-**Your Answer:** ___
-
----
-
-**Q26.** What will a YAML parser do if **tabs** are used for indentation?
-
-- A) Automatically convert each tab to two spaces
-- B) Issue a warning but continue parsing
-- C) Reject the file with a parse error
-- D) Treat each tab as four spaces
 
 **Your Answer:** ___
 
