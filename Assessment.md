@@ -4,7 +4,6 @@
 > **Format:** MCQs · Ad-hoc Command Tasks · Fix the Broken YAML
 > **Total Marks:** 100 &nbsp;|&nbsp; **Duration:** 90 minutes &nbsp;|&nbsp; **Passing Score:** 70 / 100
 >
-> 📄 Answers are in [`ANSWER-KEY.md`](./ANSWER-KEY.md) — for instructor use only.
 
 | Section | Description | Marks |
 |---------|-------------|-------|
