@@ -1,8 +1,17 @@
 # 🧪 Ansible Foundations — Final Assessment
 
 > **Course:** Ansible Fundamentals (6-Day Training)
-> **Format:** MCQs · Ad-hoc Command Tasks · YAML Fix Exercises · Short-Answer Questions
+> **Format:** MCQs · Ad-hoc Command Tasks · Fix the Broken YAML
 > **Total Marks:** 100 &nbsp;|&nbsp; **Duration:** 90 minutes &nbsp;|&nbsp; **Passing Score:** 70 / 100
+>
+> 📄 Answers are in [`ANSWER-KEY.md`](./ANSWER-KEY.md) — for instructor use only.
+
+| Section | Description | Marks |
+|---------|-------------|-------|
+| A | Multiple Choice Questions (30 × 1) | 30 |
+| B | Ad-hoc Command Tasks (8 × 5) | 40 |
+| C | Fix the Broken YAML (6 × 5) | 30 |
+| | **Total** | **100** |
 
 ---
 
@@ -10,29 +19,26 @@
 
 1. [Instructions](#-instructions)
 2. [Lab Environment Setup](#-lab-environment-setup)
-3. [Section A — Multiple Choice Questions](#section-a--multiple-choice-questions-30-marks)
-4. [Section B — Ad-hoc Command Tasks](#section-b--ad-hoc-command-tasks-25-marks)
-5. [Section C — Fix the Broken YAML](#section-c--fix-the-broken-yaml-25-marks)
-6. [Section D — Short Answer & Conceptual](#section-d--short-answer--conceptual-20-marks)
-7. [Submission Instructions](#-submission-instructions)
-8. [Answer Key (Instructor Only)](#-answer-key-instructor-only)
+3. [Section A — Multiple Choice Questions (30 marks)](#section-a--multiple-choice-questions-30-marks)
+4. [Section B — Ad-hoc Command Tasks (40 marks)](#section-b--ad-hoc-command-tasks-40-marks)
+5. [Section C — Fix the Broken YAML (30 marks)](#section-c--fix-the-broken-yaml-30-marks)
+6. [Submission Instructions](#-submission-instructions)
 
 ---
 
 ## 📌 Instructions
 
 - Attempt **all** sections.
-- For **MCQs**, write the letter of the correct answer in the space provided.
-- For **Section B**, use the inventory and config files provided in the [Lab Environment Setup](#-lab-environment-setup) section below. Run each command and **paste the actual output** in the space given.
-- For **Section C**, **rewrite the entire corrected block** — identifying the error alone is not sufficient.
-- For **Section D**, keep responses concise and precise (3–5 sentences unless stated otherwise).
-- No AI assistance is permitted. All ad-hoc command outputs must be from your own lab environment.
+- For **Section A**, write the letter of the correct answer in the `Your Answer:` field after each question.
+- For **Section B**, all required files are provided in the [Lab Environment Setup](#-lab-environment-setup) section. Run every command from the `~/ansible-assessment/` directory and **paste the actual terminal output** in the space given.
+- For **Section C**, **rewrite the entire corrected block** below each broken snippet — identifying the error alone without fixing it earns zero marks.
+- No AI assistance is permitted. All Section B outputs must come from your own running lab environment.
 
 ---
 
 ## 🖥️ Lab Environment Setup
 
-> **Complete this setup before attempting Section B.** All ad-hoc tasks in Section B depend on the files created here. Everything you need is provided — there are no dependencies on any previously created files from the training sessions.
+> **Complete this setup first — before attempting Section B.** Everything is provided here; there are no dependencies on any files created during training.
 
 ### Step 1 — Create the Assessment Working Directory
 
@@ -43,65 +49,66 @@ cd ~/ansible-assessment
 
 ### Step 2 — Create `ansible.cfg`
 
-Create the file `~/ansible-assessment/ansible.cfg` with the following content:
+Create `~/ansible-assessment/ansible.cfg` with exactly the following content:
 
 ```ini
 [defaults]
-inventory       = ./inventory.ini
-remote_user     = student
+inventory         = ./inventory.ini
+remote_user       = student
 host_key_checking = False
-become          = False
 
 [privilege_escalation]
-become_method   = sudo
+become_method = sudo
 ```
 
 ### Step 3 — Create `inventory.ini`
 
-Create the file `~/ansible-assessment/inventory.ini` with the following content. Replace the IP addresses with the actual IPs of your lab nodes:
+> ⚠️ **Replace the placeholder IPs below with the actual IP addresses of your lab nodes before saving the file.**
+> Your instructor will provide the correct IPs for your environment. Do not run any Section B commands until the IPs are updated.
+
+Create `~/ansible-assessment/inventory.ini`:
 
 ```ini
 [web]
-node1 ansible_host=192.168.1.101
-node2 ansible_host=192.168.1.102
+node1 ansible_host=<IP-OF-NODE1>
+node2 ansible_host=<IP-OF-NODE2>
 
 [db]
-node3 ansible_host=192.168.1.103
+node3 ansible_host=<IP-OF-NODE3>
 
 [all:vars]
 ansible_user=student
 ansible_python_interpreter=/usr/bin/python3
 ```
 
-> **Note:** If your lab uses a different username or Python path, update `ansible_user` and `ansible_python_interpreter` accordingly.
-
-### Step 4 — Verify SSH Access
-
-Confirm that passwordless SSH from your control node to all managed nodes is working:
-
-```bash
-ssh student@192.168.1.101
-ssh student@192.168.1.102
-ssh student@192.168.1.103
+**Example** (your IPs will differ):
+```ini
+node1 ansible_host=10.0.0.11
+node2 ansible_host=10.0.0.12
+node3 ansible_host=10.0.0.13
 ```
 
-If SSH prompts for a password, run the following on the control node to set up key-based auth:
+### Step 4 — Set Up Passwordless SSH
+
+> ⚠️ **Use the actual IPs of your nodes** in the `ssh-copy-id` commands below — not the placeholders.
+
+If SSH prompts for a password when connecting to your nodes, run these once on the control node:
 
 ```bash
-ssh-keygen -t ed25519          # Press Enter for all prompts
-ssh-copy-id student@192.168.1.101
-ssh-copy-id student@192.168.1.102
-ssh-copy-id student@192.168.1.103
+ssh-keygen -t ed25519        # Press Enter for all prompts
+ssh-copy-id student@<IP-OF-NODE1>
+ssh-copy-id student@<IP-OF-NODE2>
+ssh-copy-id student@<IP-OF-NODE3>
 ```
 
-### Step 5 — Confirm Ansible Sees the Inventory
+### Step 5 — Verify the Environment is Ready
 
 ```bash
 cd ~/ansible-assessment
 ansible-inventory --list
 ```
 
-You should see all three nodes listed under `web` and `db` groups. If this command works correctly, your environment is ready for Section B.
+You should see `node1`, `node2` under `web` and `node3` under `db`. Once this looks correct, your environment is ready for Section B.
 
 ---
 
@@ -116,16 +123,16 @@ You should see all three nodes listed under `web` and `db` groups. If this comma
 - A) Ansible installs a lightweight daemon on each managed host that runs continuously
 - B) Ansible connects to hosts on demand over SSH or WinRM; nothing persists on the remote host after execution
 - C) Ansible requires a central database to track the state of all managed hosts
-- D) Managed nodes periodically pull configuration updates from the control node
+- D) Managed nodes periodically pull configuration from the control node
 
 **Your Answer:** ___
 
 ---
 
-**Q2.** What is the only requirement on a **managed Linux host** for Ansible to connect and execute tasks?
+**Q2.** What is the only requirement on a **managed Linux host** for Ansible to connect and run tasks?
 
 - A) Ansible installed on the managed host
-- B) A running HTTP/HTTPS service
+- B) A running HTTP/HTTPS service on port 443
 - C) Python and SSH access with a valid user account
 - D) The `ansible-agent` service running and listening on port 8443
 
@@ -148,8 +155,8 @@ You should see all three nodes listed under `web` and `db` groups. If this comma
 
 - A) Running a task in parallel across multiple hosts simultaneously
 - B) Running the same task multiple times always produces the same result, without unintended side effects
-- C) Tasks that skip execution when the managed host is already at the latest version
-- D) The ability to roll back a failed playbook to a known-good state automatically
+- C) Tasks that skip execution when the managed host is already at the latest OS version
+- D) The ability to roll back a failed playbook to a previous known-good state
 
 **Your Answer:** ___
 
@@ -192,14 +199,14 @@ You should see all three nodes listed under `web` and `db` groups. If this comma
 
 - A) Stores variables specific to individual hosts that override group defaults
 - B) Stores variables applied to every host in a named group
-- C) Contains encrypted secrets managed by Ansible Vault
+- C) Contains secrets encrypted with Ansible Vault
 - D) Holds Jinja2 templates for generating configuration files
 
 **Your Answer:** ___
 
 ---
 
-**Q9.** Which file controls Ansible's default behaviour — including inventory path, remote user, and SSH settings — at the project level?
+**Q9.** Which file controls Ansible's default behaviour — inventory path, remote user, and SSH settings — at the project level?
 
 - A) `inventory/hosts.ini`
 - B) `playbooks/site.yml`
@@ -210,7 +217,7 @@ You should see all three nodes listed under `web` and `db` groups. If this comma
 
 ---
 
-**Q10.** What is the correct order of `ansible.cfg` precedence, from **highest** to **lowest** priority?
+**Q10.** What is the correct `ansible.cfg` precedence order, from **highest** to **lowest**?
 
 - A) `~/.ansible.cfg` → `./ansible.cfg` → `/etc/ansible/ansible.cfg`
 - B) `ANSIBLE_CONFIG` env var → `./ansible.cfg` → `~/.ansible.cfg` → `/etc/ansible/ansible.cfg`
@@ -221,7 +228,7 @@ You should see all three nodes listed under `web` and `db` groups. If this comma
 
 ---
 
-**Q11.** Which `ansible.cfg` directive disables SSH host-key verification (useful in lab environments)?
+**Q11.** Which `ansible.cfg` directive disables SSH host-key verification?
 
 - A) `ssh_check = false`
 - B) `disable_key_check = yes`
@@ -232,10 +239,10 @@ You should see all three nodes listed under `web` and `db` groups. If this comma
 
 ---
 
-**Q12.** In an INI inventory file, how do you create a **parent group** called `prod` that contains both the `web` and `db` child groups?
+**Q12.** In an INI inventory file, how do you create a **parent group** `prod` that contains both `web` and `db` as child groups?
 
 - A) `[prod] web db`
-- B) `[prod:children]` on one line, then `web` and `db` on subsequent lines
+- B) `[prod:children]` on one line, then `web` and `db` on the following lines
 - C) `[prod:groups] web, db`
 - D) `parent: prod; children: web, db`
 
@@ -243,7 +250,7 @@ You should see all three nodes listed under `web` and `db` groups. If this comma
 
 ---
 
-**Q13.** Which command inspects your full inventory structure and outputs all hosts and variables in JSON format?
+**Q13.** Which command outputs your full inventory structure as JSON — useful for verifying hosts and groups before running a playbook?
 
 - A) `ansible --list-hosts all`
 - B) `ansible-inventory --list`
@@ -254,7 +261,7 @@ You should see all three nodes listed under `web` and `db` groups. If this comma
 
 ---
 
-**Q14.** Where should variables specific to a single host be placed so they take precedence over group variables?
+**Q14.** Where should variables for a **single host** be placed so they override group-level defaults?
 
 - A) `group_vars/all.yml`
 - B) `inventory/hosts.ini` inline
@@ -265,7 +272,7 @@ You should see all three nodes listed under `web` and `db` groups. If this comma
 
 ---
 
-**Q15.** Which magic variable is used in the inventory to specify the actual **IP address** of a host when the hostname is not DNS-resolvable?
+**Q15.** Which inventory variable sets the actual **IP address** Ansible connects to when the hostname is not DNS-resolvable?
 
 - A) `ansible_ip`
 - B) `ansible_address`
@@ -276,7 +283,7 @@ You should see all three nodes listed under `web` and `db` groups. If this comma
 
 ---
 
-**Q16.** What command generates an SSH key pair on the control node for use with Ansible?
+**Q16.** Which command generates a new SSH key pair on the control node?
 
 - A) `ssh-keygen -t ed25519`
 - B) `ansible-keygen --ssh`
@@ -287,7 +294,7 @@ You should see all three nodes listed under `web` and `db` groups. If this comma
 
 ---
 
-**Q17.** Which command copies your control node's SSH public key to a managed host's `authorized_keys` file?
+**Q17.** Which command copies the control node's SSH public key to a managed host's `authorized_keys`?
 
 - A) `ssh-keygen --copy user@host`
 - B) `ssh-copy-id user@hostname`
@@ -300,7 +307,7 @@ You should see all three nodes listed under `web` and `db` groups. If this comma
 
 **Q18.** The control node is best described as:
 
-- A) A dedicated server that must not run any other workloads
+- A) A dedicated server that must not run any other workload
 - B) The machine where Ansible is installed and from which all automation is executed
 - C) Any managed node that also runs `ansible-playbook`
 - D) A cloud-hosted service that manages inventory and scheduling
@@ -309,7 +316,7 @@ You should see all three nodes listed under `web` and `db` groups. If this comma
 
 ---
 
-**Q19.** Which ad-hoc command module runs commands through `/bin/sh`, enabling pipes and redirection?
+**Q19.** Which module runs a command through `/bin/sh`, enabling pipes and output redirection?
 
 - A) `command`
 - B) `raw`
@@ -334,7 +341,7 @@ You should see all three nodes listed under `web` and `db` groups. If this comma
 **Q21.** An ad-hoc command returns `UNREACHABLE` for a host. What should you check **first**?
 
 - A) Whether the playbook YAML syntax is correct
-- B) Whether SSH connectivity and firewall rules allow port 22 from the control node
+- B) Whether SSH is reachable on port 22 and no firewall is blocking the connection
 - C) Whether the correct `remote_user` is set in `ansible.cfg`
 - D) Whether Python is installed on the managed node
 
@@ -342,7 +349,7 @@ You should see all three nodes listed under `web` and `db` groups. If this comma
 
 ---
 
-**Q22.** How do you run an ad-hoc command with **sudo privilege escalation** without modifying `ansible.cfg`?
+**Q22.** How do you add **sudo privilege escalation** to a single ad-hoc command without editing `ansible.cfg`?
 
 - A) Add `-s` to the command
 - B) Add `--sudo` to the command
@@ -353,12 +360,12 @@ You should see all three nodes listed under `web` and `db` groups. If this comma
 
 ---
 
-**Q23.** Which ad-hoc command uses the `setup` module to collect **all facts** about every host?
+**Q23.** Which ad-hoc command installs the `vim` package on the `web` group using the `apt` module with privilege escalation?
 
-- A) `ansible all -m facts`
-- B) `ansible all -m gather_facts`
-- C) `ansible all -m setup`
-- D) `ansible all -m info`
+- A) `ansible web -m apt -a 'name=vim state=present'`
+- B) `ansible web -m apt -a 'name=vim state=present' --become`
+- C) `ansible web -m install -a 'package=vim' --become`
+- D) `ansible web --sudo -m apt -a 'name=vim'`
 
 **Your Answer:** ___
 
@@ -375,7 +382,7 @@ You should see all three nodes listed under `web` and `db` groups. If this comma
 
 ---
 
-**Q25.** In YAML, list items are denoted by which character sequence?
+**Q25.** In YAML, list items are denoted by:
 
 - A) `*` followed by a space
 - B) `>` followed by a space
@@ -386,7 +393,7 @@ You should see all three nodes listed under `web` and `db` groups. If this comma
 
 ---
 
-**Q26.** What will a YAML parser do if **tabs** are used instead of spaces for indentation?
+**Q26.** What will a YAML parser do if **tabs** are used for indentation?
 
 - A) Automatically convert each tab to two spaces
 - B) Issue a warning but continue parsing
@@ -397,7 +404,7 @@ You should see all three nodes listed under `web` and `db` groups. If this comma
 
 ---
 
-**Q27.** Which command validates a playbook's YAML syntax without executing any tasks on managed hosts?
+**Q27.** Which command validates a playbook's YAML syntax **without** executing any tasks on hosts?
 
 - A) `ansible-playbook --dry-run site.yml`
 - B) `ansible-playbook --syntax-check site.yml`
@@ -408,21 +415,21 @@ You should see all three nodes listed under `web` and `db` groups. If this comma
 
 ---
 
-**Q28.** In an Ansible play, what is the purpose of `become: true`?
+**Q28.** In an Ansible play, what does `become: true` do?
 
-- A) Forces the play to run in check mode only
+- A) Forces the play to run in check mode without making changes
 - B) Elevates privileges (sudo) so tasks run as root or another privileged user
-- C) Enables dry-run mode without making any changes on hosts
-- D) Makes the play execute in the background and detach from the terminal
+- C) Enables dry-run mode
+- D) Detaches the play and runs it in the background
 
 **Your Answer:** ___
 
 ---
 
-**Q29.** Tasks inside an Ansible play are executed in which order?
+**Q29.** In what order are tasks in a play executed?
 
 - A) Alphabetically by task name
-- B) Randomly — Ansible automatically optimises execution order
+- B) Randomly — Ansible optimises order automatically
 - C) Top-to-bottom, in the order they are listed in the playbook
 - D) By host group priority as defined in the inventory
 
@@ -430,132 +437,247 @@ You should see all three nodes listed under `web` and `db` groups. If this comma
 
 ---
 
-**Q30.** A playbook is run twice on the same host. The first run shows `changed=1`; the second run shows `changed=0`. What does this tell you?
+**Q30.** A playbook is run twice. First run: `changed=1, failed=0`. Second run: `changed=0, failed=0`. What does the second run confirm?
 
-- A) The second run encountered an error that was silently suppressed
-- B) The task was skipped on the second run due to a `when` condition
-- C) Idempotency is working — the desired state was already present on the second run, so no changes were made
+- A) The second run silently suppressed an error
+- B) The task was skipped due to a `when` condition
+- C) Idempotency is working — the desired state was already present; no changes were needed
 - D) The module did not execute because the host was unreachable
 
 **Your Answer:** ___
 
 ---
 
-## Section B — Ad-hoc Command Tasks (25 marks)
+## Section B — Ad-hoc Command Tasks (40 marks)
 
-> **Use the inventory and `ansible.cfg` created in the [Lab Environment Setup](#-lab-environment-setup) section.**
-> Run all commands from the `~/ansible-assessment/` directory.
+> **Use the `ansible.cfg` and `inventory.ini` created in [Lab Environment Setup](#-lab-environment-setup).**
+> Run all commands from `~/ansible-assessment/`.
 > Each task is worth **5 marks**: 3 for the correct command, 2 for the pasted output.
+> Write the exact command you ran and paste the complete terminal output below it.
 
 ---
 
-### Task 1 — Connectivity Test *(5 marks)*
+### Task 1 — Connectivity Test (5 marks)
 
-**Objective:** Verify that Ansible can reach all hosts in your inventory.
+Verify that Ansible can reach all managed nodes.
 
-Run the ad-hoc connectivity test against **all** hosts. The response must confirm SSH is working and Python is available on each node.
-
-**Write the command you ran:**
+**Command:**
 
 ```bash
 # Your command here
 ```
 
-**Paste the actual output:**
+**Output:**
 
 ```
-# Your output here
+# Paste your terminal output here
 ```
 
 ---
 
-### Task 2 — Gather System Facts *(5 marks)*
+### Task 2 — Check Uptime on All Hosts (5 marks)
 
-**Objective:** Collect the **hostname** fact from all hosts using a filtered fact query — not the full setup dump.
+Retrieve the uptime of all managed nodes.
 
-**Write the command you ran:**
+**Command:**
 
 ```bash
 # Your command here
 ```
 
-**Paste the actual output:**
+**Output:**
 
 ```
-# Your output here
+# Paste your terminal output here
 ```
 
 ---
 
-### Task 3 — Check Disk Usage on the `web` Group *(5 marks)*
+### Task 3 — Check Disk Usage on the `web` Group (5 marks)
 
-**Objective:** Check disk usage across all hosts in the `web` group in human-readable format. The command must use the `shell` module (not `command`) because you want to be able to pipe the output if needed.
+Check disk usage (`df -h`) on all hosts in the `web` group.
 
-**Write the command you ran:**
+**Command:**
 
 ```bash
 # Your command here
 ```
 
-**Paste the actual output:**
+**Output:**
 
 ```
-# Your output here
+# Paste your terminal output here
 ```
 
 ---
 
-### Task 4 — Check Memory on All Hosts *(5 marks)*
+### Task 4 — Check Memory on All Hosts (5 marks)
 
-**Objective:** Run `free -m` on **all** hosts. Explain in one sentence why you must use the `shell` module rather than the `command` module for this specific output.
+Display memory usage in megabytes across all nodes.
 
-**Write the command you ran:**
+**Command:**
 
 ```bash
 # Your command here
 ```
 
-**Paste the actual output:**
+**Output:**
 
 ```
-# Your output here
-```
-
-**Why `shell` is required here (one sentence):**
-
-```
-# Your explanation here
+# Paste your terminal output here
 ```
 
 ---
 
-### Task 5 — Install a Package with Privilege Escalation *(5 marks)*
+### Task 5 — Check Hostname on the `db` Group (5 marks)
 
-**Objective:** Install the `tree` utility on the `web` group using the `apt` module with sudo privilege escalation — using only an ad-hoc command, no playbook.
+Print the hostname of every node in the `db` group.
 
-**Write the command you ran:**
+**Command:**
 
 ```bash
 # Your command here
 ```
 
-**Paste the actual output:**
+**Output:**
 
 ```
-# Your output here
+# Paste your terminal output here
 ```
 
 ---
 
-## Section C — Fix the Broken YAML (25 marks)
+### Task 6 — Install a Package with Privilege Escalation (5 marks)
 
-> Each exercise contains **one or more deliberate errors**. Rewrite the fully corrected version below each block.
-> Identifying the error alone is **not sufficient** — you must provide working, correctly indented YAML.
-> Each exercise: **2 marks** for identifying all errors, **3 marks** for the corrected code.
+Install the `tree` package on the `web` group using an ad-hoc command with sudo.
+
+**Command:**
+
+```bash
+# Your command here
+```
+
+**Output:**
+
+```
+# Paste your terminal output here
+```
 
 ---
 
-### Exercise 1 — Module Arguments at Wrong Indentation Level *(5 marks)*
+### Task 7 — Run a Playbook and Capture Output (5 marks)
+
+Save the playbook below as `~/ansible-assessment/install-curl.yml`, run it **twice**, and paste both outputs.
+
+```yaml
+---
+- name: Ensure curl is installed on web servers
+  hosts: web
+  become: true
+
+  tasks:
+    - name: Install curl
+      apt:
+        name: curl
+        state: present
+```
+
+**Save the playbook:**
+
+```bash
+# Save the above content to ~/ansible-assessment/install-curl.yml
+```
+
+**First run command:**
+
+```bash
+# Your command here
+```
+
+**First run output:**
+
+```
+# Paste your first run output here
+```
+
+**Second run command:**
+
+```bash
+# Your command here (same command)
+```
+
+**Second run output:**
+
+```
+# Paste your second run output here
+```
+
+**What is different between the two outputs, and what does that tell you?**
+
+```
+# Your one-sentence answer here
+```
+
+---
+
+### Task 8 — Run a Multi-Task Playbook and Verify the Result (5 marks)
+
+Save the playbook below as `~/ansible-assessment/setup-web.yml`, run it, then verify the nginx service is running with an ad-hoc command.
+
+```yaml
+---
+- name: Install and start nginx on web servers
+  hosts: web
+  become: true
+
+  tasks:
+    - name: Install nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Ensure nginx service is started and enabled
+      service:
+        name: nginx
+        state: started
+        enabled: true
+```
+
+**Save and run the playbook:**
+
+```bash
+# Your ansible-playbook command here
+```
+
+**Playbook output:**
+
+```
+# Paste your playbook output here
+```
+
+**Now verify nginx is running using an ad-hoc `shell` command on the `web` group:**
+
+```bash
+# Your ad-hoc verification command here
+```
+
+**Verification output:**
+
+```
+# Paste your verification output here
+```
+
+---
+
+## Section C — Fix the Broken YAML (30 marks)
+
+> Each exercise below contains **one or more deliberate errors**.
+> **Rewrite the fully corrected version** below each broken block.
+> Each exercise: **2 marks** for correctly identifying all errors · **3 marks** for the corrected working code.
+
+---
+
+### Exercise 1 (5 marks)
 
 **Broken playbook:**
 
@@ -585,9 +707,9 @@ Run the ad-hoc connectivity test against **all** hosts. The response must confir
 
 ---
 
-### Exercise 2 — Tab Characters Used Instead of Spaces *(5 marks)*
+### Exercise 2 (5 marks)
 
-> Tabs are represented below as `→` for visibility.
+> `→` represents a tab character.
 
 **Broken playbook:**
 
@@ -614,7 +736,7 @@ Run the ad-hoc connectivity test against **all** hosts. The response must confir
 
 ---
 
-### Exercise 3 — Broken List Syntax in a Variable File *(5 marks)*
+### Exercise 3 (5 marks)
 
 **Broken variable file:**
 
@@ -639,7 +761,7 @@ packages:
 
 ---
 
-### Exercise 4 — Multiple Errors: Missing Colons, Wrong Boolean, Missing Separator *(5 marks)*
+### Exercise 4 (5 marks)
 
 **Broken playbook fragment:**
 
@@ -655,7 +777,7 @@ packages:
         state started
 ```
 
-**What is/are the error(s)?** (list all)
+**What is/are the error(s)?** (list every one)
 
 ```
 # Your answer here
@@ -669,7 +791,7 @@ packages:
 
 ---
 
-### Exercise 5 — Broken `ansible.cfg` *(5 marks)*
+### Exercise 5 (5 marks)
 
 **Broken `ansible.cfg`:**
 
@@ -696,72 +818,39 @@ host_key_checking = False
 
 ---
 
-## Section D — Short Answer & Conceptual (20 marks)
+### Exercise 6 (5 marks)
 
-> Answer in **3–5 sentences** unless otherwise stated. Each question is worth **4 marks**.
-
----
-
-### Q1 — Why Automation Tools Beat Scripts *(4 marks)*
-
-Explain **two specific limitations** of shell scripts for infrastructure automation that Ansible directly solves. Use the term **idempotency** in your answer.
-
-```
-# Your answer here
-```
-
----
-
-### Q2 — Agentless Architecture Explained *(4 marks)*
-
-Describe step-by-step what happens when Ansible runs a task on a managed Linux host — from the moment you execute the command on the control node to the moment the task is complete. What is left on the managed host after the run finishes?
-
-```
-# Your answer here
-```
-
----
-
-### Q3 — `command` vs `shell` Module *(4 marks)*
-
-A colleague suggests always using the `shell` module because it is more powerful. Write a response explaining when you would **prefer `command` over `shell`** and what risk the `shell` module introduces.
-
-```
-# Your answer here
-```
-
----
-
-### Q4 — Variable Precedence *(4 marks)*
-
-You have defined `http_port: 80` in `group_vars/webservers.yml` and `http_port: 8080` in `host_vars/web01.yml`. When Ansible runs a play targeting the `webservers` group and processes `web01`, which value is used and why?
-
-```
-# Your answer here
-```
-
----
-
-### Q5 — Reading Playbook Output *(4 marks)*
-
-After running the playbook below **twice** on a fresh Ubuntu server, the first run shows `changed=1, failed=0` and the second run shows `changed=0, failed=0`.
+**Broken playbook:**
 
 ```yaml
 ---
-- name: Ensure nginx is installed
-  hosts: webservers
+- name: Setup database server
+  hosts: db
   become: true
+
   tasks:
-    - name: Install nginx
+  - name: Install postgresql
       apt:
-        name: nginx
+        name: postgresql
         state: present
+
+    - name: Start postgresql
+      service
+        name: postgresql
+        state: started
+        enabled: true
 ```
 
-Explain what happened during each run and what the difference in output tells you about how Ansible is designed. What would the output look like if you changed `state: present` to `state: absent` and ran it a third time?
+**What is/are the error(s)?** (list every one)
 
 ```
 # Your answer here
+```
+
+**Corrected playbook:**
+
+```yaml
+# Your corrected YAML here
 ```
 
 ---
@@ -769,162 +858,22 @@ Explain what happened during each run and what the difference in output tells yo
 ## 📤 Submission Instructions
 
 1. **Fork** this repository to your own GitHub account.
-2. Create a branch named `assessment/<your-name>` (e.g., `assessment/jane-doe`).
-3. Complete all sections directly in this file — write your answers below each question.
-4. For Section B, run every command from your lab environment and paste the **actual terminal output**.
-5. Commit your completed file with the message:
+2. Create a branch named `assessment/<your-name>` — e.g., `assessment/jane-doe`.
+3. Fill in all answers directly in this file below each question.
+4. For Section B Tasks 7 and 8, save the provided playbooks to `~/ansible-assessment/` before running them.
+5. Commit your completed file:
    ```
    feat: complete ansible assessment - <your-name>
    ```
-6. Open a **Pull Request** to the `main` branch of the original repository with the title:
+6. Open a **Pull Request** to `main` with the title:
    ```
    Assessment Submission — <Your Name> — <Date>
    ```
-7. Include the following in your PR description:
+7. Include in the PR description:
    - Your full name
-   - Lab environment used (local VM / cloud instance / provided lab)
-   - Ansible version (`ansible --version` output)
-   - Any questions or comments for the instructor
-
----
-
-## 🔐 Answer Key (Instructor Only)
-
-> ⚠️ **Do not share this section with candidates before or during the assessment.**
-
-<details>
-<summary>🔓 Click to expand — Instructor Answer Key</summary>
-
----
-
-### Section A — MCQ Answers
-
-| Q | Answer | Rationale |
-|---|--------|-----------|
-| 1 | B | Agentless = SSH/WinRM on demand; nothing persists on the managed host after execution |
-| 2 | C | Python + SSH access is the only requirement on managed Linux hosts |
-| 3 | C | Agent Daemon is a Puppet/Chef concept; Ansible is agentless by design |
-| 4 | B | Idempotency = same result regardless of how many times the operation runs |
-| 5 | B | Ubuntu uses `apt update` then `apt install ansible -y` |
-| 6 | B | EPEL must be enabled on RHEL/CentOS before the `ansible` package is available |
-| 7 | C | `ansible --version` is the standard installation verification command |
-| 8 | B | `group_vars/` stores variables applied to all hosts in the named group |
-| 9 | C | `ansible.cfg` is the project-level configuration file |
-| 10 | B | `ANSIBLE_CONFIG` → `./ansible.cfg` → `~/.ansible.cfg` → `/etc/ansible/ansible.cfg` |
-| 11 | C | `host_key_checking = False` disables SSH host-key verification |
-| 12 | B | `[prod:children]` followed by child group names on subsequent lines |
-| 13 | B | `ansible-inventory --list` outputs full inventory as JSON |
-| 14 | C | `host_vars/<hostname>.yml` overrides group vars for that specific host |
-| 15 | C | `ansible_host` is the magic variable for the target IP/hostname |
-| 16 | A | `ssh-keygen -t ed25519` generates a modern key pair |
-| 17 | B | `ssh-copy-id user@hostname` copies the public key to `authorized_keys` |
-| 18 | B | Control node = machine where Ansible is installed and from which automation runs |
-| 19 | C | `shell` module runs through `/bin/sh` enabling pipes and redirection |
-| 20 | B | `command` = direct binary exec; `shell` = through `/bin/sh` |
-| 21 | B | `UNREACHABLE` = SSH/network connectivity failure — check ports and keys first |
-| 22 | C | `--become` flag enables privilege escalation in ad-hoc commands |
-| 23 | C | `ansible all -m setup` collects all facts |
-| 24 | B | `port: 8080` — colon immediately after key, single space, then value |
-| 25 | C | `- ` (hyphen + single space) denotes list items in YAML |
-| 26 | C | YAML parsers reject tab characters with a parse error — tabs are forbidden |
-| 27 | B | `ansible-playbook --syntax-check` validates without executing any tasks |
-| 28 | B | `become: true` elevates to sudo/root for the play or individual task |
-| 29 | C | Tasks execute top-to-bottom in the order they are listed |
-| 30 | C | `changed=0` on second run confirms idempotency: desired state already present |
-
----
-
-### Section B — Expected Commands
-
-| Task | Expected Command |
-|------|-----------------|
-| 1 — Connectivity Test | `ansible all -m ping` |
-| 2 — Gather Hostname Fact | `ansible all -m setup -a "filter=ansible_hostname"` |
-| 3 — Disk Usage on web | `ansible web -m shell -a 'df -h'` |
-| 4 — Memory on all hosts | `ansible all -m shell -a 'free -m'` |
-| 5 — Install tree on web | `ansible web -m apt -a 'name=tree state=present' --become` |
-
-**Task 4 explanation:** `free -m` does not require pipes or redirects itself, but the `shell` module is still appropriate when the intent is to use shell-style formatting or chain commands; `command` would also work here — accept either module, penalise only if the student cannot explain the difference.
-
----
-
-### Section C — Corrected YAML & Error Explanations
-
-**Exercise 1:**
-- **Error:** Module arguments `name` and `state` are at the same indentation level as `apt:` instead of being indented 2 spaces beneath it.
-```yaml
----
-- name: Install nginx
-  hosts: webservers
-  become: true
-  tasks:
-    - name: Install package
-      apt:
-        name: nginx
-        state: present
-```
-
-**Exercise 2:**
-- **Error:** Tab characters used for indentation instead of spaces. YAML parsers reject tabs entirely.
-```yaml
----
-- name: Configure server
-  hosts: all
-  tasks:
-    - name: Check disk
-      shell: df -h
-```
-
-**Exercise 3:**
-- **Errors:** (1) Missing `---` document start marker. (2) List items missing `- ` (hyphen + space) prefix — bare indented strings are not valid YAML list items.
-```yaml
----
-packages:
-  - nginx
-  - python3
-  - git
-```
-
-**Exercise 4:**
-- **Errors:** (1) `name Deploy web app` — missing `:` after `name`. (2) `hosts webservers` — missing `:` after `hosts`. (3) `become True` — missing `:` after `become`; boolean should be lowercase `true`. (4) `state started` — missing `:` separator between key and value.
-```yaml
-- name: Deploy web app
-  hosts: webservers
-  become: true
-
-  tasks:
-    - name: Start nginx
-      service:
-        name: nginx
-        state: started
-```
-
-**Exercise 5:**
-- **Errors:** (1) `Inventory` — key must be lowercase `inventory`. (2) `remote user` — key must use an underscore: `remote_user`.
-```ini
-[defaults]
-inventory       = inventory/hosts.ini
-remote_user     = student
-become          = true
-become_method   = sudo
-host_key_checking = False
-```
-
----
-
-### Section D — Model Answers
-
-**Q1:** Shell scripts lack idempotency — a script that creates a user will error on the second run if the user already exists, requiring manual guard checks that are inconsistent across authors. Scripts also have no structured error handling; a failure partway through leaves the system in an unknown state. Ansible modules are idempotent by design — they check current state before acting — and halt with structured JSON output on failure.
-
-**Q2:** When `ansible-playbook` is run, the control node opens an SSH connection to the managed host, transfers a small Python module to a temporary directory on the remote, executes it, collects the structured JSON output, and then deletes the temporary module. Nothing is left on the managed host after execution — the architecture is fully stateless and leaves no footprint.
-
-**Q3:** The `command` module should be preferred when shell features (pipes, redirection, environment variable expansion, command chaining with `&&` or `;`) are not needed — it executes the binary directly without invoking `/bin/sh`, which eliminates the risk of shell injection and makes intent explicit. The `shell` module passes arguments to `/bin/sh`, which introduces the risk that user-controlled input could be interpreted as shell metacharacters.
-
-**Q4:** `host_vars/web01.yml` takes precedence. In Ansible's variable precedence chain, host-level variables always win over group-level variables. For `web01`, `http_port` resolves to `8080` even though `group_vars/webservers.yml` sets it to `80`.
-
-**Q5:** First run — nginx was not installed, so the `apt` module installed it and reported `changed=1`. Second run — Ansible checked the state and found nginx already present (`state: present` is already satisfied), so it made no changes and reported `changed=0`. This is idempotency in action: the module describes desired state, not steps. If `state: absent` were set on a third run, Ansible would remove nginx and report `changed=1` again.
-
-</details>
+   - Lab environment (local VM / cloud instance / provided lab)
+   - Output of `ansible --version`
+   - Any questions for the instructor
 
 ---
 
