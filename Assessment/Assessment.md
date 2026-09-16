@@ -165,7 +165,7 @@ You should see `node1`, `node2` under `web` and `node3` under `db`. Once this lo
 **Q5.** On Ubuntu, which sequence of commands correctly installs Ansible?
 
 - A) `sudo yum install epel-release -y` → `sudo yum install ansible -y`
-- B) `sudo apt update` → `sudo apt install ansible -y`
+- B) `sudo yum update` → `sudo yum install ansible -y`
 - C) `pip install ansible` → `ansible --configure`
 - D) `snap install ansible` → `ansible init`
 
@@ -316,12 +316,12 @@ You should see `node1`, `node2` under `web` and `node3` under `db`. Once this lo
 
 ---
 
-**Q23.** Which ad-hoc command installs the `vim` package on the `web` group using the `apt` module with privilege escalation?
+**Q23.** Which ad-hoc command installs the `vim` package on the `web` group using the `yum` module with privilege escalation?
 
-- A) `ansible web -m apt -a 'name=vim state=present'`
-- B) `ansible web -m apt -a 'name=vim state=present' --become`
+- A) `ansible web -m yum -a 'name=vim state=present'`
+- B) `ansible web -m yum -a 'name=vim state=present' --become`
 - C) `ansible web -m install -a 'package=vim' --become`
-- D) `ansible web --sudo -m apt -a 'name=vim'`
+- D) `ansible web --sudo -m yum -a 'name=vim'`
 
 **Your Answer:** ___
 
@@ -510,7 +510,7 @@ Install the `tree` package on the `web` group using an ad-hoc command with sudo.
 
 ---
 
-### Task 7 — Run a Playbook and Capture Output (5 marks)
+### Task 7 — Run a Playbook and Cyumure Output (5 marks)
 
 Save the playbook below as `~/ansible-assessment/install-curl.yml`, run it **twice**, and paste both outputs.
 
@@ -577,7 +577,7 @@ Save the playbook below as `~/ansible-assessment/setup-web.yml`, run it, then ve
 
   tasks:
     - name: Install nginx
-      apt:
+      yum:
         name: nginx
         state: present
 
@@ -633,7 +633,7 @@ Save the playbook below as `~/ansible-assessment/setup-web.yml`, run it, then ve
   become: true
   tasks:
     - name: Install package
-      apt:
+      yum:
       name: nginx
       state: present
 ```
@@ -775,7 +775,7 @@ host_key_checking = False
 
   tasks:
   - name: Install postgresql
-      apt:
+      yum:
         name: postgresql
         state: present
 
