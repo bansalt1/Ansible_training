@@ -510,7 +510,7 @@ Install the `tree` package on the `web` group using an ad-hoc command with sudo.
 
 ---
 
-### Task 7 — Run a Playbook and Cyumure Output (5 marks)
+### Task 7 — Run a Playbook and Capture Output (5 marks)
 
 Save the playbook below as `~/ansible-assessment/install-curl.yml`, run it **twice**, and paste both outputs.
 
