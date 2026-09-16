@@ -573,7 +573,7 @@
   become: true
   tasks:
     - name: Install package
-      apt:
+      yum:
       name: nginx
       state: present</div>
     <div class="field-label">What is/are the error(s)?</div>
@@ -654,7 +654,7 @@ host_key_checking = False</div>
 
   tasks:
   - name: Install postgresql
-      apt:
+      yum:
         name: postgresql
         state: present
 
