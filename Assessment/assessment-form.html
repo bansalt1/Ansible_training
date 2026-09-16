@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ansible Foundations — Final Assessment</title>
+<title>Ansible Foundations — Final Assessment (Attendee)</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; font-size: 14px; line-height: 1.6; background: #f7f8fa; color: #1f2328; }
@@ -62,40 +62,10 @@
 
   .note { background: #fffbeb; border: 1px solid #fcd34d; border-radius: 6px; padding: 10px 14px; font-size: 12.5px; color: #92400e; margin-bottom: 14px; }
 
-  .score-panel { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px 24px; margin: 28px 0 20px; }
-  .score-panel h2 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-  .score-panel .subtitle { font-size: 12px; color: #57606a; margin-bottom: 20px; }
-  .score-section-title { font-size: 13px; font-weight: 600; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid #e5e7eb; }
-  .score-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 13px; }
-  .score-row span { flex: 1; }
-  .score-row input[type=number] { width: 64px; border: 1px solid #d0d7de; border-radius: 6px; padding: 5px 8px; font-size: 13px; text-align: center; font-family: inherit; }
-  .score-row input:focus { outline: 2px solid #3b82d4; }
-  .score-row .max-mark { color: #57606a; font-size: 12px; width: 28px; }
-  .score-subsection { margin-bottom: 22px; }
-
-  .score-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px; }
-  .score-box { border: 1px solid #e5e7eb; border-radius: 8px; padding: 14px; text-align: center; }
-  .score-box .label { font-size: 11px; color: #57606a; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 4px; }
-  .score-box .val { font-size: 28px; font-weight: 700; color: #1f2328; }
-  .score-box .max { font-size: 12px; color: #57606a; }
-  .score-box.total { grid-column: 1 / -1; border-color: #3b82d4; background: #eff6ff; }
-  .score-box.total .val { color: #1e40af; font-size: 36px; }
-
-  .verdict { text-align: center; padding: 16px; border-radius: 8px; font-size: 16px; font-weight: 700; margin-top: 16px; display: none; }
-  .verdict.pass { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
-  .verdict.fail { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
-
-  .btn-row { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+  .btn-row { display: flex; gap: 10px; margin-top: 28px; flex-wrap: wrap; justify-content: center; }
   .btn { padding: 9px 22px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; font-family: inherit; }
-  .btn-primary { background: #3b82d4; color: #fff; }
-  .btn-primary:hover { background: #2563eb; }
   .btn-secondary { background: #f6f8fa; color: #1f2328; border: 1px solid #d0d7de; }
   .btn-secondary:hover { background: #e5e7eb; }
-  .btn-warning { background: #d97706; color: #fff; }
-  .btn-warning:hover { background: #b45309; }
-
-  .notes-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px 20px; margin-bottom: 20px; }
-  .notes-card h2 { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
 
   footer { text-align: center; font-size: 11px; color: #57606a; border-top: 1px solid #e5e7eb; margin-top: 40px; padding-top: 16px; }
 
@@ -589,62 +559,8 @@ host_key_checking = False</div>
     <textarea name="c6_fix" rows="15" placeholder="Rewrite the complete corrected YAML here..."></textarea>
   </div>
 
-  <!-- ══════════════════════════════════════════ SCORING PANEL ══ -->
-  <div class="score-panel">
-    <h2>📋 Instructor Scoring Panel</h2>
-    <p class="subtitle">Section A is auto-graded from selections above. Enter marks for Sections B and C, then click Calculate Score.</p>
-
-    <div class="score-subsection">
-      <div class="score-section-title">Section A — MCQ (auto-graded, max 20)</div>
-      <div class="score-row">
-        <span>Auto-calculated from radio button selections</span>
-        <input type="number" id="score-a" min="0" max="20" value="0" readonly style="background:#f6f8fa;color:#57606a;">
-        <span class="max-mark">/ 20</span>
-      </div>
-    </div>
-
-    <div class="score-subsection">
-      <div class="score-section-title">Section B — Ad-hoc Tasks (max 40)</div>
-      <div class="score-row"><span>Task 1 — Connectivity Test</span><input type="number" id="sb1" min="0" max="5" placeholder="0–5"><span class="max-mark">/ 5</span></div>
-      <div class="score-row"><span>Task 2 — Check Uptime</span><input type="number" id="sb2" min="0" max="5" placeholder="0–5"><span class="max-mark">/ 5</span></div>
-      <div class="score-row"><span>Task 3 — Disk Usage</span><input type="number" id="sb3" min="0" max="5" placeholder="0–5"><span class="max-mark">/ 5</span></div>
-      <div class="score-row"><span>Task 4 — Check Memory</span><input type="number" id="sb4" min="0" max="5" placeholder="0–5"><span class="max-mark">/ 5</span></div>
-      <div class="score-row"><span>Task 5 — Check Hostname</span><input type="number" id="sb5" min="0" max="5" placeholder="0–5"><span class="max-mark">/ 5</span></div>
-      <div class="score-row"><span>Task 6 — Install with Escalation</span><input type="number" id="sb6" min="0" max="5" placeholder="0–5"><span class="max-mark">/ 5</span></div>
-      <div class="score-row"><span>Task 7 — Run Playbook Twice + Explain</span><input type="number" id="sb7" min="0" max="5" placeholder="0–5"><span class="max-mark">/ 5</span></div>
-      <div class="score-row"><span>Task 8 — Multi-Task Playbook + Verify</span><input type="number" id="sb8" min="0" max="5" placeholder="0–5"><span class="max-mark">/ 5</span></div>
-    </div>
-
-    <div class="score-subsection">
-      <div class="score-section-title">Section C — Fix YAML (max 30)</div>
-      <div class="score-row"><span>Exercise 1 — apt indentation</span><input type="number" id="sc1" min="0" max="5" placeholder="0–5"><span class="max-mark">/ 5</span></div>
-      <div class="score-row"><span>Exercise 2 — Tab characters</span><input type="number" id="sc2" min="0" max="5" placeholder="0–5"><span class="max-mark">/ 5</span></div>
-      <div class="score-row"><span>Exercise 3 — List syntax</span><input type="number" id="sc3" min="0" max="5" placeholder="0–5"><span class="max-mark">/ 5</span></div>
-      <div class="score-row"><span>Exercise 4 — Missing colons</span><input type="number" id="sc4" min="0" max="5" placeholder="0–5"><span class="max-mark">/ 5</span></div>
-      <div class="score-row"><span>Exercise 5 — ansible.cfg errors</span><input type="number" id="sc5" min="0" max="5" placeholder="0–5"><span class="max-mark">/ 5</span></div>
-      <div class="score-row"><span>Exercise 6 — Indentation + missing colon</span><input type="number" id="sc6" min="0" max="5" placeholder="0–5"><span class="max-mark">/ 5</span></div>
-    </div>
-
-    <div class="score-grid">
-      <div class="score-box"><div class="label">Section A</div><div class="val" id="disp-a">—</div><div class="max">/ 20</div></div>
-      <div class="score-box"><div class="label">Section B</div><div class="val" id="disp-b">—</div><div class="max">/ 40</div></div>
-      <div class="score-box"><div class="label">Section C</div><div class="val" id="disp-c">—</div><div class="max">/ 30</div></div>
-      <div class="score-box total"><div class="label">Total Score</div><div class="val" id="disp-total">—</div><div class="max">/ 100 &nbsp;·&nbsp; Passing score: 70</div></div>
-    </div>
-
-    <div class="verdict pass" id="verdict-pass">✅ PASS — Congratulations!</div>
-    <div class="verdict fail" id="verdict-fail">❌ FAIL — Score is below the passing threshold of 70</div>
-
-    <div class="btn-row">
-      <button class="btn btn-primary" id="btn-calc">Calculate Score</button>
-      <button class="btn btn-secondary" id="btn-reset">Reset Scores</button>
-      <button class="btn btn-secondary" onclick="window.print()">🖨 Print / Save PDF</button>
-    </div>
-  </div>
-
-  <div class="notes-card">
-    <h2>Instructor Notes / Feedback</h2>
-    <textarea rows="5" style="width:100%;border:1px solid #d0d7de;border-radius:6px;padding:9px 11px;font-size:13px;font-family:inherit;resize:vertical;" placeholder="Add feedback, corrections, or notes for this attendee here..."></textarea>
+  <div class="btn-row">
+    <button class="btn btn-secondary" onclick="window.print()">🖨 Print / Save PDF</button>
   </div>
 
   <footer>
@@ -654,94 +570,18 @@ host_key_checking = False</div>
 </div>
 
 <script>
-  const answerKey = {
-    q1:'B', q2:'C', q3:'C', q4:'B', q5:'B',
-    q6:'B', q7:'C', q9:'C', q11:'C', q13:'B',
-    q15:'C', q16:'A', q17:'B', q19:'C', q22:'C',
-    q24:'B', q25:'C', q27:'B', q28:'B', q30:'C'
-  };
-  const total_mcq = Object.keys(answerKey).length;
+  const total_mcq = 20;
 
-  // Progress bar
+  // Progress bar only
   function updateProgress() {
-    let answered = 0;
-    Object.keys(answerKey).forEach(function(q) {
-      if (document.querySelector('input[name="' + q + '"]:checked')) answered++;
-    });
+    var answered = 0;
+    document.querySelectorAll('#section-a input[type=radio]:checked').forEach(function() { answered++; });
     var pct = Math.round((answered / total_mcq) * 100);
     document.getElementById('prog-bar').style.width = pct + '%';
     document.getElementById('prog-label').textContent = answered + ' of ' + total_mcq + ' answered';
   }
   document.querySelectorAll('#section-a input[type=radio]').forEach(function(r) {
     r.addEventListener('change', updateProgress);
-  });
-
-  // Calculate
-  document.getElementById('btn-calc').addEventListener('click', function() {
-    // Section A
-    var scoreA = 0;
-    Object.entries(answerKey).forEach(function(entry) {
-      var q = entry[0], correct = entry[1];
-      var sel = document.querySelector('input[name="' + q + '"]:checked');
-      var card = document.querySelector('[data-q="' + q + '"]');
-      if (card) {
-        card.querySelectorAll('.option').forEach(function(opt) {
-          opt.classList.remove('correct', 'incorrect');
-        });
-        card.querySelectorAll('.option').forEach(function(opt) {
-          var radio = opt.querySelector('input[type=radio]');
-          if (radio && radio.value === correct) opt.classList.add('correct');
-          if (sel && radio && radio.value === sel.value && sel.value !== correct) opt.classList.add('incorrect');
-        });
-      }
-      if (sel && sel.value === correct) scoreA++;
-    });
-    document.getElementById('score-a').value = scoreA;
-    document.getElementById('disp-a').textContent = scoreA;
-
-    // Section B
-    var scoreB = 0;
-    ['sb1','sb2','sb3','sb4','sb5','sb6','sb7','sb8'].forEach(function(id) {
-      var v = Math.min(5, Math.max(0, parseInt(document.getElementById(id).value) || 0));
-      scoreB += v;
-    });
-    document.getElementById('disp-b').textContent = scoreB;
-
-    // Section C
-    var scoreC = 0;
-    ['sc1','sc2','sc3','sc4','sc5','sc6'].forEach(function(id) {
-      var v = Math.min(5, Math.max(0, parseInt(document.getElementById(id).value) || 0));
-      scoreC += v;
-    });
-    document.getElementById('disp-c').textContent = scoreC;
-
-    // Total + verdict
-    var total = scoreA + scoreB + scoreC;
-    document.getElementById('disp-total').textContent = total;
-    if (total >= 70) {
-      document.getElementById('verdict-pass').style.display = 'block';
-      document.getElementById('verdict-fail').style.display = 'none';
-    } else {
-      document.getElementById('verdict-pass').style.display = 'none';
-      document.getElementById('verdict-fail').style.display = 'block';
-    }
-  });
-
-  // Reset
-  document.getElementById('btn-reset').addEventListener('click', function() {
-    ['sb1','sb2','sb3','sb4','sb5','sb6','sb7','sb8',
-     'sc1','sc2','sc3','sc4','sc5','sc6'].forEach(function(id) {
-      document.getElementById(id).value = '';
-    });
-    document.getElementById('score-a').value = 0;
-    ['disp-a','disp-b','disp-c','disp-total'].forEach(function(id) {
-      document.getElementById(id).textContent = '—';
-    });
-    document.getElementById('verdict-pass').style.display = 'none';
-    document.getElementById('verdict-fail').style.display = 'none';
-    document.querySelectorAll('.option').forEach(function(o) {
-      o.classList.remove('correct','incorrect');
-    });
   });
 </script>
 </body>
