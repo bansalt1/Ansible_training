@@ -522,7 +522,7 @@ Save the playbook below as `~/ansible-assessment/install-curl.yml`, run it **twi
 
   tasks:
     - name: Install curl
-      apt:
+      yum:
         name: curl
         state: present
 ```
