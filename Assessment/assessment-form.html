@@ -123,15 +123,15 @@
   <div class="progress-card">
     <div style="display:flex;justify-content:space-between;align-items:center;">
       <span style="font-size:13px;font-weight:600;">Section A Progress</span>
-      <span id="prog-label" class="progress-label">0 of 20 answered</span>
+      <span id="prog-label" class="progress-label">0 of 30 answered</span>
     </div>
     <div class="progress-wrap"><div class="progress-bar" id="prog-bar"></div></div>
   </div>
 
   <!-- ══════════════════════════════════════════ SECTION A ══ -->
   <div class="section-header">
-    <h2>Section A — Multiple Choice Questions <span class="marks">20 marks</span></h2>
-    <p>20 questions × 1 mark each · Select the single best answer for each question</p>
+    <h2>Section A — Multiple Choice Questions <span class="marks">30 marks</span></h2>
+    <p>30 questions × 1 mark each · Select the single best answer for each question</p>
   </div>
 
   <div id="section-a">
@@ -213,6 +213,17 @@
       </div>
     </div>
 
+    <div class="q-card" data-q="q8">
+      <div class="q-num">Q8 <span class="marks">1 mark</span></div>
+      <div class="q-text">Which command lists all hosts in the <code>web</code> group without running any module on them?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q8" value="A"> <span>A) <code>ansible web --list-hosts</code></span></label>
+        <label class="option"><input type="radio" name="q8" value="B"> <span>B) <code>ansible web --show-hosts</code></span></label>
+        <label class="option"><input type="radio" name="q8" value="C"> <span>C) <code>ansible-inventory web --hosts</code></span></label>
+        <label class="option"><input type="radio" name="q8" value="D"> <span>D) <code>ansible-playbook web --list-hosts</code></span></label>
+      </div>
+    </div>
+
     <div class="q-card" data-q="q9">
       <div class="q-num">Q9 <span class="marks">1 mark</span></div>
       <div class="q-text">Which file controls Ansible's default behaviour — inventory path, remote user, and SSH settings — at the project level?</div>
@@ -221,6 +232,17 @@
         <label class="option"><input type="radio" name="q9" value="B"> <span>B) <code>playbooks/site.yml</code></span></label>
         <label class="option"><input type="radio" name="q9" value="C"> <span>C) <code>ansible.cfg</code></span></label>
         <label class="option"><input type="radio" name="q9" value="D"> <span>D) <code>group_vars/all.yml</code></span></label>
+      </div>
+    </div>
+
+    <div class="q-card" data-q="q10">
+      <div class="q-num">Q10 <span class="marks">1 mark</span></div>
+      <div class="q-text">Which command is used to test connectivity to all hosts in an inventory using Ansible's <code>ping</code> module?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q10" value="A"> <span>A) <code>ansible all -m ping</code></span></label>
+        <label class="option"><input type="radio" name="q10" value="B"> <span>B) <code>ansible ping all</code></span></label>
+        <label class="option"><input type="radio" name="q10" value="C"> <span>C) <code>ansible-playbook all -m ping</code></span></label>
+        <label class="option"><input type="radio" name="q10" value="D"> <span>D) <code>ansible all --ping</code></span></label>
       </div>
     </div>
 
@@ -235,6 +257,17 @@
       </div>
     </div>
 
+    <div class="q-card" data-q="q12">
+      <div class="q-num">Q12 <span class="marks">1 mark</span></div>
+      <div class="q-text">Which inventory format uses square brackets to define host groups?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q12" value="A"> <span>A) YAML inventory</span></label>
+        <label class="option"><input type="radio" name="q12" value="B"> <span>B) INI-style inventory</span></label>
+        <label class="option"><input type="radio" name="q12" value="C"> <span>C) JSON-only inventory</span></label>
+        <label class="option"><input type="radio" name="q12" value="D"> <span>D) XML inventory</span></label>
+      </div>
+    </div>
+
     <div class="q-card" data-q="q13">
       <div class="q-num">Q13 <span class="marks">1 mark</span></div>
       <div class="q-text">Which command outputs your full inventory structure as JSON — useful for verifying hosts and groups before running a playbook?</div>
@@ -243,6 +276,17 @@
         <label class="option"><input type="radio" name="q13" value="B"> <span>B) <code>ansible-inventory --list</code></span></label>
         <label class="option"><input type="radio" name="q13" value="C"> <span>C) <code>ansible all --inventory</code></span></label>
         <label class="option"><input type="radio" name="q13" value="D"> <span>D) <code>ansible-playbook --check inventory/</code></span></label>
+      </div>
+    </div>
+
+    <div class="q-card" data-q="q14">
+      <div class="q-num">Q14 <span class="marks">1 mark</span></div>
+      <div class="q-text">In an inventory, what does the following mean? <code>web01 ansible_host=10.10.10.20</code></div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q14" value="A"> <span>A) The host is renamed to 10.10.10.20</span></label>
+        <label class="option"><input type="radio" name="q14" value="B"> <span>B) Ansible uses 10.10.10.20 as the address for connecting to <code>web01</code></span></label>
+        <label class="option"><input type="radio" name="q14" value="C"> <span>C) Ansible changes the managed host's IP address</span></label>
+        <label class="option"><input type="radio" name="q14" value="D"> <span>D) The host is moved into an IP-based inventory group</span></label>
       </div>
     </div>
 
@@ -279,6 +323,17 @@
       </div>
     </div>
 
+    <div class="q-card" data-q="q18">
+      <div class="q-num">Q18 <span class="marks">1 mark</span></div>
+      <div class="q-text">Which ad-hoc command displays the current disk-space usage on every host?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q18" value="A"> <span>A) <code>ansible all -m disk -a "df -h"</code></span></label>
+        <label class="option"><input type="radio" name="q18" value="B"> <span>B) <code>ansible all -m command -a "df -h"</code></span></label>
+        <label class="option"><input type="radio" name="q18" value="C"> <span>C) <code>ansible all -m shell -a "disk -h"</code></span></label>
+        <label class="option"><input type="radio" name="q18" value="D"> <span>D) <code>ansible-playbook all -a "df -h"</code></span></label>
+      </div>
+    </div>
+
     <div class="q-card" data-q="q19">
       <div class="q-num">Q19 <span class="marks">1 mark</span></div>
       <div class="q-text">Which module runs a command through <code>/bin/sh</code>, enabling pipes and output redirection?</div>
@@ -290,6 +345,28 @@
       </div>
     </div>
 
+    <div class="q-card" data-q="q20">
+      <div class="q-num">Q20 <span class="marks">1 mark</span></div>
+      <div class="q-text">What is the main difference between the <code>command</code> and <code>shell</code> modules?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q20" value="A"> <span>A) <code>command</code> always runs as root, while <code>shell</code> does not</span></label>
+        <label class="option"><input type="radio" name="q20" value="B"> <span>B) <code>shell</code> runs commands through a shell, supporting shell features such as pipes and redirection</span></label>
+        <label class="option"><input type="radio" name="q20" value="C"> <span>C) <code>command</code> works only on Windows</span></label>
+        <label class="option"><input type="radio" name="q20" value="D"> <span>D) <code>shell</code> can only execute built-in Ansible commands</span></label>
+      </div>
+    </div>
+
+    <div class="q-card" data-q="q21">
+      <div class="q-num">Q21 <span class="marks">1 mark</span></div>
+      <div class="q-text">Which option specifies a particular inventory file for an ad-hoc Ansible command?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q21" value="A"> <span>A) <code>-i</code></span></label>
+        <label class="option"><input type="radio" name="q21" value="B"> <span>B) <code>-f</code></span></label>
+        <label class="option"><input type="radio" name="q21" value="C"> <span>C) <code>-I</code></span></label>
+        <label class="option"><input type="radio" name="q21" value="D"> <span>D) <code>--hosts-file-only</code></span></label>
+      </div>
+    </div>
+
     <div class="q-card" data-q="q22">
       <div class="q-num">Q22 <span class="marks">1 mark</span></div>
       <div class="q-text">How do you add <strong>sudo privilege escalation</strong> to a single ad-hoc command without editing <code>ansible.cfg</code>?</div>
@@ -298,6 +375,17 @@
         <label class="option"><input type="radio" name="q22" value="B"> <span>B) Add <code>--sudo</code> to the command</span></label>
         <label class="option"><input type="radio" name="q22" value="C"> <span>C) Add <code>--become</code> to the command</span></label>
         <label class="option"><input type="radio" name="q22" value="D"> <span>D) Prefix the module argument with <code>sudo:</code></span></label>
+      </div>
+    </div>
+
+    <div class="q-card" data-q="q23">
+      <div class="q-num">Q23 <span class="marks">1 mark</span></div>
+      <div class="q-text">Which Ansible command runs a playbook named <code>site.yml</code>?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q23" value="A"> <span>A) <code>ansible site.yml</code></span></label>
+        <label class="option"><input type="radio" name="q23" value="B"> <span>B) <code>ansible-run site.yml</code></span></label>
+        <label class="option"><input type="radio" name="q23" value="C"> <span>C) <code>ansible-playbook site.yml</code></span></label>
+        <label class="option"><input type="radio" name="q23" value="D"> <span>D) <code>ansible execute site.yml</code></span></label>
       </div>
     </div>
 
@@ -323,6 +411,17 @@
       </div>
     </div>
 
+    <div class="q-card" data-q="q26">
+      <div class="q-num">Q26 <span class="marks">1 mark</span></div>
+      <div class="q-text">Which YAML structure correctly represents an Ansible task list?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q26" value="A"> <span>A) <code>tasks: - name: Install nginx</code></span></label>
+        <label class="option"><input type="radio" name="q26" value="B"> <span>B) <code>tasks = name: Install nginx</code></span></label>
+        <label class="option"><input type="radio" name="q26" value="C"> <span>C) <code>tasks -&gt; name: Install nginx</code></span></label>
+        <label class="option"><input type="radio" name="q26" value="D"> <span>D) <code>task: [name = Install nginx]</code></span></label>
+      </div>
+    </div>
+
     <div class="q-card" data-q="q27">
       <div class="q-num">Q27 <span class="marks">1 mark</span></div>
       <div class="q-text">Which command validates a playbook's YAML syntax <strong>without</strong> executing any tasks on hosts?</div>
@@ -342,6 +441,17 @@
         <label class="option"><input type="radio" name="q28" value="B"> <span>B) Elevates privileges (sudo) so tasks run as root or another privileged user</span></label>
         <label class="option"><input type="radio" name="q28" value="C"> <span>C) Enables dry-run mode</span></label>
         <label class="option"><input type="radio" name="q28" value="D"> <span>D) Detaches the play and runs it in the background</span></label>
+      </div>
+    </div>
+
+    <div class="q-card" data-q="q29">
+      <div class="q-num">Q29 <span class="marks">1 mark</span></div>
+      <div class="q-text">Which command runs a playbook in check mode to preview changes without making them?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q29" value="A"> <span>A) <code>ansible-playbook site.yml --check</code></span></label>
+        <label class="option"><input type="radio" name="q29" value="B"> <span>B) <code>ansible-playbook site.yml --dry-run-only</code></span></label>
+        <label class="option"><input type="radio" name="q29" value="C"> <span>C) <code>ansible site.yml --preview</code></span></label>
+        <label class="option"><input type="radio" name="q29" value="D"> <span>D) <code>ansible-playbook site.yml --syntax-check-only</code></span></label>
       </div>
     </div>
 
@@ -370,7 +480,7 @@
     <div class="q-num">Task 1 — Connectivity Test <span class="marks purple">5 marks</span></div>
     <div class="task-desc">Verify that Ansible can reach all managed nodes.</div>
     <div class="field-label">Command you ran</div>
-    <textarea name="b1_cmd" rows="2" placeholder="e.g. ansible all -m ping"></textarea>
+    <textarea name="b1_cmd" rows="2" placeholder="Enter the command you ran..."></textarea>
     <div class="field-label">Terminal output</div>
     <textarea name="b1_out" rows="6" placeholder="Paste your full terminal output here..."></textarea>
   </div>
@@ -379,7 +489,7 @@
     <div class="q-num">Task 2 — Check Uptime on All Hosts <span class="marks purple">5 marks</span></div>
     <div class="task-desc">Retrieve the uptime of all managed nodes.</div>
     <div class="field-label">Command you ran</div>
-    <textarea name="b2_cmd" rows="2" placeholder='e.g. ansible all -m command -a "uptime"'></textarea>
+    <textarea name="b2_cmd" rows="2" placeholder="Enter the command you ran..."></textarea>
     <div class="field-label">Terminal output</div>
     <textarea name="b2_out" rows="6" placeholder="Paste your full terminal output here..."></textarea>
   </div>
@@ -388,7 +498,7 @@
     <div class="q-num">Task 3 — Check Disk Usage on <code>web</code> Group <span class="marks purple">5 marks</span></div>
     <div class="task-desc">Check disk usage (<code>df -h</code>) on all hosts in the <code>web</code> group.</div>
     <div class="field-label">Command you ran</div>
-    <textarea name="b3_cmd" rows="2" placeholder='e.g. ansible web -m command -a "df -h"'></textarea>
+    <textarea name="b3_cmd" rows="2" placeholder="Enter the command you ran..."></textarea>
     <div class="field-label">Terminal output</div>
     <textarea name="b3_out" rows="6" placeholder="Paste your full terminal output here..."></textarea>
   </div>
@@ -397,7 +507,7 @@
     <div class="q-num">Task 4 — Check Memory on All Hosts <span class="marks purple">5 marks</span></div>
     <div class="task-desc">Display memory usage in megabytes across all nodes.</div>
     <div class="field-label">Command you ran</div>
-    <textarea name="b4_cmd" rows="2" placeholder='e.g. ansible all -m command -a "free -m"'></textarea>
+    <textarea name="b4_cmd" rows="2" placeholder="Enter the command you ran..."></textarea>
     <div class="field-label">Terminal output</div>
     <textarea name="b4_out" rows="6" placeholder="Paste your full terminal output here..."></textarea>
   </div>
@@ -406,7 +516,7 @@
     <div class="q-num">Task 5 — Check Hostname on <code>db</code> Group <span class="marks purple">5 marks</span></div>
     <div class="task-desc">Print the hostname of every node in the <code>db</code> group.</div>
     <div class="field-label">Command you ran</div>
-    <textarea name="b5_cmd" rows="2" placeholder='e.g. ansible db -m command -a "hostname"'></textarea>
+    <textarea name="b5_cmd" rows="2" placeholder="Enter the command you ran..."></textarea>
     <div class="field-label">Terminal output</div>
     <textarea name="b5_out" rows="6" placeholder="Paste your full terminal output here..."></textarea>
   </div>
@@ -415,7 +525,7 @@
     <div class="q-num">Task 6 — Install Package with Privilege Escalation <span class="marks purple">5 marks</span></div>
     <div class="task-desc">Install the <code>tree</code> package on the <code>web</code> group using an ad-hoc command with sudo.</div>
     <div class="field-label">Command you ran</div>
-    <textarea name="b6_cmd" rows="2" placeholder="e.g. ansible web -m apt -a 'name=tree state=present' --become"></textarea>
+    <textarea name="b6_cmd" rows="2" placeholder="Enter the command you ran..."></textarea>
     <div class="field-label">Terminal output</div>
     <textarea name="b6_out" rows="6" placeholder="Paste your full terminal output here..."></textarea>
   </div>
@@ -424,7 +534,7 @@
     <div class="q-num">Task 7 — Run Playbook and Capture Output (both runs) <span class="marks purple">5 marks</span></div>
     <div class="task-desc">Save <code>install-curl.yml</code> to <code>~/ansible-assessment/</code>, run it <strong>twice</strong>, and paste both outputs. Then explain the difference.</div>
     <div class="field-label">Run command</div>
-    <textarea name="b7_cmd" rows="2" placeholder="e.g. ansible-playbook install-curl.yml"></textarea>
+    <textarea name="b7_cmd" rows="2" placeholder="Enter the command you ran..."></textarea>
     <div class="field-label">First run output</div>
     <textarea name="b7_out1" rows="7" placeholder="Paste first run terminal output here..."></textarea>
     <div class="field-label">Second run output</div>
@@ -437,11 +547,11 @@
     <div class="q-num">Task 8 — Multi-Task Playbook and Verify <span class="marks purple">5 marks</span></div>
     <div class="task-desc">Save <code>setup-web.yml</code>, run it, then verify nginx is running with an ad-hoc <code>shell</code> command on the <code>web</code> group.</div>
     <div class="field-label">Playbook run command</div>
-    <textarea name="b8_cmd" rows="2" placeholder="e.g. ansible-playbook setup-web.yml"></textarea>
+    <textarea name="b8_cmd" rows="2" placeholder="Enter the command you ran..."></textarea>
     <div class="field-label">Playbook output</div>
     <textarea name="b8_out" rows="8" placeholder="Paste playbook output here..."></textarea>
     <div class="field-label">Verification command (ad-hoc shell)</div>
-    <textarea name="b8_vcmd" rows="2" placeholder="e.g. ansible web -m shell -a 'systemctl is-active nginx'"></textarea>
+    <textarea name="b8_vcmd" rows="2" placeholder="Enter the verification command you ran..."></textarea>
     <div class="field-label">Verification output</div>
     <textarea name="b8_vout" rows="4" placeholder="Paste verification output here..."></textarea>
   </div>
@@ -570,7 +680,7 @@ host_key_checking = False</div>
 </div>
 
 <script>
-  const total_mcq = 20;
+  const total_mcq = 30;
 
   // Progress bar only
   function updateProgress() {
