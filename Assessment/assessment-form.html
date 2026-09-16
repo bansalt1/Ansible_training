@@ -637,14 +637,8 @@ host_key_checking = False</div>
 
     <div class="btn-row">
       <button class="btn btn-primary" id="btn-calc">Calculate Score</button>
-      <button class="btn btn-warning" id="btn-show-key">Show Answer Key</button>
       <button class="btn btn-secondary" id="btn-reset">Reset Scores</button>
       <button class="btn btn-secondary" onclick="window.print()">🖨 Print / Save PDF</button>
-    </div>
-
-    <div id="answer-key-panel" style="display:none;margin-top:20px;background:#f6f8fa;border:1px solid #e5e7eb;border-radius:8px;padding:16px 20px;">
-      <div style="font-size:13px;font-weight:700;margin-bottom:12px;">Answer Key — Section A</div>
-      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;font-size:13px;" id="key-grid"></div>
     </div>
   </div>
 
@@ -665,12 +659,6 @@ host_key_checking = False</div>
     q6:'B', q7:'C', q9:'C', q11:'C', q13:'B',
     q15:'C', q16:'A', q17:'B', q19:'C', q22:'C',
     q24:'B', q25:'C', q27:'B', q28:'B', q30:'C'
-  };
-  const qLabels = {
-    q1:'Q1', q2:'Q2', q3:'Q3', q4:'Q4', q5:'Q5',
-    q6:'Q6', q7:'Q7', q9:'Q9', q11:'Q11', q13:'Q13',
-    q15:'Q15', q16:'Q16', q17:'Q17', q19:'Q19', q22:'Q22',
-    q24:'Q24', q25:'Q25', q27:'Q27', q28:'Q28', q30:'Q30'
   };
   const total_mcq = Object.keys(answerKey).length;
 
@@ -736,27 +724,6 @@ host_key_checking = False</div>
     } else {
       document.getElementById('verdict-pass').style.display = 'none';
       document.getElementById('verdict-fail').style.display = 'block';
-    }
-  });
-
-  // Show answer key
-  document.getElementById('btn-show-key').addEventListener('click', function() {
-    var panel = document.getElementById('answer-key-panel');
-    if (panel.style.display === 'none') {
-      var grid = document.getElementById('key-grid');
-      grid.innerHTML = '';
-      Object.entries(answerKey).forEach(function(entry) {
-        var q = entry[0], ans = entry[1];
-        var cell = document.createElement('div');
-        cell.style.cssText = 'background:#fff;border:1px solid #e5e7eb;border-radius:6px;padding:6px 10px;display:flex;justify-content:space-between;align-items:center;';
-        cell.innerHTML = '<span style="color:#57606a;">' + qLabels[q] + '</span><strong style="color:#166534;">' + ans + '</strong>';
-        grid.appendChild(cell);
-      });
-      panel.style.display = 'block';
-      this.textContent = 'Hide Answer Key';
-    } else {
-      panel.style.display = 'none';
-      this.textContent = 'Show Answer Key';
     }
   });
 
