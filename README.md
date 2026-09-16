@@ -54,7 +54,92 @@ See [`Beginner/README.md`](./Beginner/README.md) for an overview of this section
 
 Complete the final assessment in [`Assessment/Assessment.md`](./Assessment/Assessment.md) once you have finished the beginner exercises.
 
-See [`Assessment/README.md`](./Assessment/README.md) for submission instructions.
+See [`Assessment/README.md`](./Assessment/README.md) for full submission instructions.
+
+---
+
+## Submitting Your Assessment
+
+Follow these steps exactly to submit your completed assessment via GitHub Pull Request.
+
+### Step 1 — Fork the Repository
+
+1. Open [https://github.com/bansalt1/Ansible_training](https://github.com/bansalt1/Ansible_training) in your browser.
+2. Click the **Fork** button (top-right corner).
+3. GitHub will create a copy of this repo under your own account.
+
+### Step 2 — Clone Your Fork
+
+```bash
+git clone https://github.com/<your-github-username>/Ansible_training.git
+cd Ansible_training
+```
+
+> Replace `<your-github-username>` with your actual GitHub username.
+
+### Step 3 — Create a Branch
+
+```bash
+git checkout -b assessment/<your-name>
+```
+
+**Example:**
+
+```bash
+git checkout -b assessment/jane-doe
+```
+
+### Step 4 — Fill in Your Answers
+
+Open `Assessment/Assessment.md` and fill in your answers directly in the file:
+
+- **Section A** — write the answer letter in the `Your Answer:` field after each question
+- **Section B** — paste the exact command you ran and the full terminal output
+- **Section C** — rewrite the complete corrected YAML block below each broken snippet
+
+### Step 5 — Stage and Commit
+
+```bash
+git add Assessment/Assessment.md
+git commit -m "feat: complete ansible assessment - <your-name>"
+```
+
+**Example:**
+
+```bash
+git commit -m "feat: complete ansible assessment - jane-doe"
+```
+
+### Step 6 — Push Your Branch
+
+```bash
+git push origin assessment/<your-name>
+```
+
+**Example:**
+
+```bash
+git push origin assessment/jane-doe
+```
+
+> If prompted for credentials, enter your GitHub username and a **Personal Access Token (PAT)** as the password. GitHub no longer accepts plain passwords over HTTPS.
+> Generate a PAT at: **GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)** — select the `repo` scope.
+
+### Step 7 — Open a Pull Request
+
+1. Go to your forked repo on GitHub: `https://github.com/<your-github-username>/Ansible_training`
+2. Click the **"Compare & pull request"** button that appears after your push.
+3. Set the **base repository** to `bansalt1/Ansible_training` and **base branch** to `main`.
+4. Set the PR title to:
+   ```
+   Assessment Submission — <Your Name> — <Date>
+   ```
+5. In the PR description, include:
+   - Your full name
+   - Lab environment used (local VM / cloud instance / provided lab)
+   - Output of `ansible --version`
+   - Any questions for the instructor
+6. Click **Create Pull Request**.
 
 ---
 
